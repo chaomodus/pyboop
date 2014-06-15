@@ -1,13 +1,36 @@
 <!DOCTYPE html>
+
+
 <head>
-<title>{{metadata.title}}</title>
-<style type="text/css">
-table { border: 1px solid black; }
-div { border: 1px solid black; }
-td { border: 1px solid black; }
-</style>
+<!-- why would i be doing this -->
+<meta charset="utf-8">
+<meta name="description" content={{metadata.description}}>
+  <meta name="author" content={{metadata.author}}>
+<link href='http://fonts.googleapis.com/css?family=Arvo:400,400italic,700,700italic|Rokkitt:400,700' rel='stylesheet' type='text/css'>
+ <link rel="stylesheet" type="text/css" href="css.css">
+<title>{{metadata.title}}}</title>
 </head>
+
+
 <body>
+<header>
+<nav><p>Projects</p><p>News</p><p>&nbsp;</p><p>About</p><p>Contact</p></nav>
+<img id="logo" src="pixyfoologo-plain.svg" alt="pixyfoo logo" />
+  <p><span class="firstWord">Pixyfoo</span> is something and it's awesome and it's like the wind baby! Nobody gets it! Whiz.</p>
+</header>
+
+
+<section id="main">
 {{content}}
+</section>
+
+<footer>
+<div id="columns"><p style="display: inline-block; text-align: left;"><span class="firstWord">Contact</span><br />this is an email address<br />umm Portland, OR?<br /><br /><br />copyright the elder gods & me.</p>
+<p>&nbsp;</p><p><img id="logoFooter" src="pixyfoologo-plain.svg" alt="pixyfoo logo" /></p><p>&nbsp;</p>
+<p class="firstWord" style="display: inline-block; text-align: right;">Projects<br /><br />News<br /><br />About</p></div>
+</footer>
 </body>
+
+
+
 </html>

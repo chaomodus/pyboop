@@ -1,0 +1,135 @@
+body, div , header, footer, ul, li {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    display: block;
+    position: relative;
+}
+
+img { border: none; }
+
+body {
+    background: white;
+    color: #ff3000;
+    font-family: 'Arvo', serif;
+    }
+
+header, footer {
+    background: #1a1a1a;
+    font-family: 'Rokkitt', serif;
+    color: white;
+    font-size: 25px;
+    width: 100%;
+    margin: 0;
+    padding: 20px 0px;
+    text-align: center;
+    }
+header {
+    }
+#logo {
+    display: block;
+    width: 20%;
+    margin: -50px auto;
+}
+header p {
+    margin: 80px 0 10px;
+    padding: 0;
+    clear: both;
+    }
+header .firstWord, footer .firstWord {
+    font-family: 'Arvo', serif;
+    color: #ff3000;
+    font-weight: 700;
+    }
+nav {
+    font-family: 'Arvo', serif;
+    color: #ff3000;
+    font-size: 20px;
+}
+header nav {
+    margin: 10px 0;
+    width: 100%;
+  -webkit-column-count: 5;
+
+  -moz-column-count: 5;
+
+  column-count: 5;
+}
+header nav p {
+    margin: 0 auto;
+}
+
+#main {
+    margin: 50px 10%; 
+    padding: 0;
+}
+
+#main .content {
+    font-family: 'Arvo', serif;
+    font-size: 15px;
+}
+
+footer {
+    font-size: 20px;
+    width: 100%;
+    padding: 20px 0;
+     }
+footer p{
+}
+footer div {
+    margin: 0 auto;
+}
+footer div.column {
+    display: inline-block;
+}
+footer ul {
+    margin: 0;
+    padding: 0;
+    }
+footer li {
+    list-style-type: none;
+    text-align: right;
+    }
+footer .firstWord {
+    font-weight: 500;
+}
+footer #columns {
+    margin: 10px 0;
+    width: 100%;
+    -moz-columns: 3;
+    -webkit-columns: 3;
+    columns: 3;
+}
+footer p {
+    margin: 0 auto;
+}
+#logoFooter {
+    height: 200px;
+    margin: -15px 0;
+}
+
+
+/* project gallery */
+#projectGallery {
+  -webkit-column-count: 4;
+  -webkit-column-gap: 10px;
+
+  -moz-column-count: 4;
+  -moz-column-gap: 10px;
+
+  column-count: 4;
+  column-gap: 10px;
+}
+
+.projectBox {
+    height: 500px;
+    background: black;
+    padding: 5px;
+    margin: 0 0 10px 0;
+}
+
+.projectBox img {
+    width: 100%;
+    display: block;
+}
