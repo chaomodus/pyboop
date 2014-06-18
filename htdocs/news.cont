@@ -2,7 +2,7 @@
 <section id="" class="content">
 
 
-<script type="text/javascript" src="http://username.tumblr.com/api/read/json"></script>
+<script type="text/javascript" src="http://pixyfoo.tumblr.com/api/read/json"></script>
 
 <script type="text/javascript">
     // The variable "tumblr_api_read" is now set to your tumblr feed.
