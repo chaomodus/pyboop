@@ -1,20 +1,7 @@
-<h1 class="mainTitle">Project Gallery</h1>
+<h1 class="mainTitle"></h1>
 <section id="projectGallery" class="content">
 
-<div class="projectBox"><img src="projectImageBG.png"></div>
-<div class="projectBox"><img src="projectImageBG.png"></div>
-
-<div class="projectBox"><img src="projectImageBG.png"></div>
-
-<div class="projectBox"><img src="projectImageBG.png"></div>
-
-<div class="projectBox"><img src="projectImageBG.png"></div>
-
-<div class="projectBox"><img src="projectImageBG.png"></div>
-
-<div class="projectBox"><img src="projectImageBG.png"></div>
-
-<div class="projectBox"><img src="projectImageBG.png"></div>
+Soon....
 
 
 </section>
