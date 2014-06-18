@@ -2,14 +2,6 @@
 <section id="" class="content">
 
 
-<script type="text/javascript" src="http://pixyfoo.tumblr.com/api/read/json"></script>
-
-<script type="text/javascript">
-    // The variable "tumblr_api_read" is now set to your tumblr feed.
-    document.write(
-        '<a href="' + tumblr_api_read['posts'][0]['url'] + 
-        '">My most recent Tumblr post</a>'
-    );
-</script>
+<script type="text/javascript" src="http://pixyfoo.tumblr.com/js"></script> 
 
 </section>
