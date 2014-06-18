@@ -51,6 +51,10 @@ nav a, nav a:link, nav a:visited, nav a:active, nav a:hover {
     color: #ff3000;
     text-decoration: none;
 }
+#footernav  a, #footernav a:link, #footernav a:visited, #footernav a:active, #footernav a:hover {
+    color: #ff3000;
+    text-decoration: none;
+}
 header nav {
     margin: 10px 0;
     width: 100%;
