@@ -2,7 +2,7 @@
 <section id="projectGallery" class="content">
 
 <h1>Kord</h1>
-<img src="pixylogo.png" alt="pix's unicorn skull and crossed pen and demo hammer" class="floatleft" style="width: 250px;" />
+<p class="floatleft"><img src="pixylogo.png" alt="pix's unicorn skull and crossed pen and demo hammer" style="width: 250px;" /></p>
 <p>Kord is a creator and a producer. A mad cyborg from beyond the galaxy. They make things and make things better.</p>
 <p class="clear">put featured project(s) here</p>
 
