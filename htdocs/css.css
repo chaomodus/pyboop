@@ -9,7 +9,7 @@ body, div , header, footer, ul, li {
 
 img { border: none; }
 .clear { clear: both; }
-.floatLeft { float: left; }
+.floatLeft { float: left; margin-right: 20px; }
 .floatRight { float: right; }
 
 body {
@@ -37,7 +37,7 @@ header {
 }
 header p {
     margin: 80px 0 10px;
-    padding: 0;
+    padding: 0;d 
     clear: both;
     }
 header .firstWord, footer .firstWord {
