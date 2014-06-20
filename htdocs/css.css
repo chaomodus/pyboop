@@ -9,7 +9,7 @@ body, div , header, footer, ul, li {
 
 img { border: none; }
 .clear { clear: both; }
-.floatLeft { float: left; margin-right: 20px; }
+.floatLeft { float: left; margin: 0 20px 20px 0; }
 .floatRight { float: right; }
 
 body {
