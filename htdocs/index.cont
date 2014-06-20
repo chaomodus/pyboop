@@ -1,9 +1,8 @@
 <h1 class="mainTitle"></h1>
-<section id="projectGallery" class="content">
+<section class="content">
 
 <h1>Kord</h1>
-<p class="floatleft"><img src="pixylogo.png" alt="pix's unicorn skull and crossed pen and demo hammer" style="width: 250px;" /></p>
-<p>Kord is a creator and a producer. A mad cyborg from beyond the galaxy. They make things and make things better.</p>
+<p><img src="pixylogo.png" alt="pix's unicorn skull and crossed pen and demo hammer" style="width: 250px;" class="floatLeft" />Kord is a creator and a producer. A mad cyborg from beyond the galaxy. They make things and make things better.</p>
 <p class="clear">put featured project(s) here</p>
 
 <h2 class="clear">Cas</h2>
