@@ -1,36 +1,36 @@
 {
     "projects":
     {
-	"example" : { "title":"An Example Project",
-		      "path":"path/to/contfile.cont",
-		      "repository":"http://gitorious.org/example/example",
-		      "featured_photo_path":"path/to/image.jpg",
-		      "credits":
-		      [
-			  ["author","Primary Optional Author"],
-			  ["contributer","Some Optional Contributer"],
-			  ["producer","Some Optional Producer"],
-			  ["arbitrary","Some Arbitrary Krewe"]
-		      ],
-		      "summary":"A short description of an example project as should be shown in index or summary pages.",
-		      "gallery_path":"path/to/imagedir/",
-		      "tags":["tag","anothertag"],
-		      "show":false
-		    },
-	"pixywerk" : { "title":"PixyWerk CMS",
-		       "path":"pixywerk",
-		       "repository":"http://gitorious.org/pixywerk/pixywerk",
-		       "featured_photo_path":"pixywerk.jpg",
-		       "credits":
-		       [
-			   ["author","Chao Modus"],
-			   ["producer","Pixy"]
-		       ],
-		       "summary":"A python WSGI DTRT file-system-based CMS with magical unicorn powers.",
-		       "gallery_path":false,
-		       "tags":["cms","python","boring","backend","foss","wsgi"],
-		       "show":true
-		     }
+        "example" : { "title":"An Example Project",
+                      "path":"path/to/contfile.cont",
+                      "repository":"http://gitorious.org/example/example",
+                      "featured_photo_path":"path/to/image.jpg",
+                      "credits":
+                      [
+                          ["author","Primary Optional Author"],
+                          ["contributer","Some Optional Contributer"],
+                          ["producer","Some Optional Producer"],
+                          ["arbitrary","Some Arbitrary Krewe"]
+                      ],
+                      "summary":"A short description of an example project as should be shown in index or summary pages.",
+                      "gallery_path":"path/to/imagedir/",
+                      "tags":["tag","anothertag"],
+                      "show":false
+                    },
+        "pixywerk" : { "title":"PixyWerk CMS",
+                       "path":"pixywerk",
+                       "repository":"http://gitorious.org/pixywerk/pixywerk",
+                       "featured_photo_path":"pixywerk.jpg",
+                       "credits":
+                       [
+                           ["author","Chao Modus"],
+                           ["producer","Pixy"]
+                       ],
+                       "summary":"A python WSGI DTRT file-system-based CMS with magical unicorn powers.",
+                       "gallery_path":false,
+                       "tags":["cms","python","boring","backend","foss","wsgi"],
+                       "show":true
+                     }
 
     }
 }

@@ -1,8 +1,8 @@
 <h1 class="mainTitle">Project Gallery</h1>
 <section id="projectGallery" class="content">
 
-{% for project_key in meta.projects.keys() if meta.projects[project_key].show %}
-{% set project = meta.projects[project_key] %}
+{% for project_key in metadata.projects.keys() if metadata.projects[project_key].show %}
+{% set project = metadata.projects[project_key] %}
 <div class="projectBox">
      <img src="{{ project.featured_photo_path }}">
      <h2>{{ project.title }}</h2>
