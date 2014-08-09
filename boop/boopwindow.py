@@ -12,9 +12,10 @@ class BoopWindow(pyglet.window.Window):
 
     def dispatch_event(self, event_type, *args):
         result = None
-        try:
-            result = self.scene_manager.dispatch_event(self, event_type, *args)
-        except:
-            pass
+        # try:
+        #     result = self.scene_manager.dispatch_event(self, event_type, *args)
+        # except:
+        #     pass
+        result = self.scene_manager.dispatch_event(self, event_type, *args)
         if not result:
             pyglet.window.Window.dispatch_event(self, event_type, *args)

@@ -1,0 +1,20 @@
+{"stage":
+ {
+     "stagename":"Test Stage",
+     "scalemode":"pixel",
+     "layers":(
+	 {"name":"sky", "scrollspeed":0.1, "type":"background", "image":"sky.png"},
+	 {"name":"city", "scrollspeed":0.5, "type":"background", "image":"city.png"},
+	 {"name":"fg", "scrollspeed":1, "type":"grid",
+	  'tilesize':(16,16),
+	  'layout':'test.png',
+	  'resources':{0:'floor.png',
+		       1:'wall.png'}
+	 },
+	 {"name":"platforms","scrollspeed":1, "type":"collide",
+	  'tilesize':(16,16),
+	  "layout":"test_collide.png"
+	 }
+     )
+ }
+}
