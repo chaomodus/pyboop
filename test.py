@@ -30,7 +30,7 @@ class Layer(boop.component.Component):
         # do math here
         return self.vpx, self.vpy
 
-    def on_setviewport(self, evt, vpx, vpy):
+    def on_movecamera(self, evt, (vpx, vpy)):
         self.vpx = vpx
         self.vpy = vpy
 
@@ -72,20 +72,21 @@ class TestScene(boop.scene.Scene):
         self.tiles = pyglet.image.ImageGrid(tiles_image, 12,12)
         self.sprites = list()
         self.spritebatch = pyglet.graphics.Batch()
-        self.xoffset = 300
-        self.yoffset = 300
+
         x = 0
         y = 0
-        for i in range(10000):
-            spr = pyglet.sprite.Sprite(self.tiles[random.randint(0,(12*12) - 1)], batch=self.spritebatch)
-            self.sprites.append(spr)
 
-            spr.x = x + self.xoffset
-            spr.y = y + self.yoffset
-            if (x > 32000):
+        for i in range(1000):
+            spr = pyglet.sprite.Sprite(self.tiles[random.randint(0,(12*12) - 1)], batch=self.spritebatch)
+            spr.x = x
+            spr.y = y
+            if (x > 3200):
                 x = 0
                 y += 32
             x+=32
+
+            self.sprites.append(spr)
+
 
     def handle_event(self, window, scene_manager, event_type, *args):
         if event_type == 'on_draw':
@@ -93,11 +94,12 @@ class TestScene(boop.scene.Scene):
             self.label.draw()
             x = 0
             y = 0
+            xoffset, yoffset = scene_manager.get_camera()
             for spr in self.sprites:
-                spr.x = x+self.xoffset
-                spr.y = y+self.yoffset
+                spr.x = x+xoffset
+                spr.y = y+yoffset
 
-                if (x > 32000):
+                if (x > 3200):
                     x = 0
                     y += 32
                 x+=32
@@ -106,13 +108,13 @@ class TestScene(boop.scene.Scene):
         if event_type == 'on_key_press':
             symbol, modifiers = args
             if symbol == pyglet.window.key.UP:
-                self.yoffset += 32
+                scene_manager.move_camera(0,32)
             elif symbol == pyglet.window.key.DOWN:
-                self.yoffset -= 32
+                scene_manager.move_camera(0,-32)
             elif symbol == pyglet.window.key.RIGHT:
-                self.xoffset += 32
+                scene_manager.move_camera(32,0)
             elif symbol == pyglet.window.key.LEFT:
-                self.xoffset -= 32
+                scene_manager.move_camera(-32,0)
             else:
                 print symbol
 
