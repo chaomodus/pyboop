@@ -1,5 +1,7 @@
 # pyBOOP!
 
+OUTDATED
+
 2d Love
 
 - Actors

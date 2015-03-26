@@ -1,9 +1,3 @@
-import pyglet
-import boop
-import boop.component
-import boop.scene
-import random
-
 class StageLoader(object):
     def __init__(self, stagedict):
         self.definition = stagedict
@@ -61,7 +55,7 @@ class IntercutScene(CutScene):
 
 
 class TestScene(boop.scene.Scene):
-    def __init__(self, window):
+    def __init__(self, window, xoffs=0, yoffs=0):
         boop.scene.Scene.__init__(self)
         self.label = pyglet.text.Label('Hello, world',
                                        font_name='Times New Roman',
@@ -117,9 +111,3 @@ class TestScene(boop.scene.Scene):
                 scene_manager.move_camera(-32,0)
             else:
                 print symbol
-
-mywindow = boop.BoopWindow(1300,700,scene_manager=boop.scene.SceneManager())
-mywindow.scene_manager.scenes['test'] = TestScene(mywindow)
-mywindow.scene_manager.activate_scene('test')
-
-pyglet.app.run()

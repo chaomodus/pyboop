@@ -1,23 +1,50 @@
+import sys
+DEBUG=False
+
 class SceneManager(object):
     def __init__(self):
         self.scenes = dict()
-        self.active_scene = None
+        self.active_scenes = set()
 
         self.camerax = 0
         self.cameray = 0
 
-    def dispatch_event(self, window, event_type, *args):
-        try:
-            return self.scenes[self.active_scene].handle_event(window, self, event_type, *args)
-        except KeyError:
-            return None
+    def dispatch_event(self, event_type, window, *args):
+        ret = None
+        val = None
+        DEBUG and sys.stdout.write('dispatch_event: '+str(self)+' '+str(window)+' '+str(event_type)+' '+str(args)+'\n')
+        for scene in self.active_scenes:
+            try:
+                val = self.scenes[scene].handle_event(event_type, window, self, *args)
+                if val is not None:
+                    ret = val
+            except KeyError:
+                pass
 
-    def activate_scene(self, scene):
+        return val
+
+    def add(self, sceneobject, scene):
+        self.scenes[scene] = sceneobject
+
+    def activate(self, scene):
         try:
             self.scenes[scene].activate(self)
-            self.active_scene = scene
+            self.active_scenes.add(scene)
         except KeyError:
             pass
+
+    def deactivate(self, scene):
+        try:
+            self.scenes[scene].deactivate(self)
+            self.active_scenes.remove(scene)
+        except (ValueError, KeyError):
+            pass
+
+    def clear(self):
+        for scene in self.active_scenes:
+            self.scenes[scene].deactivate(self)
+
+        self.active_scenes = list()
 
     def set_camera(self, x, y):
         self.camerax = x
