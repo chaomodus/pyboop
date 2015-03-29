@@ -17,6 +17,13 @@ def up_tangent(angle):
 def down_tangent(angle):
     return (angle - qtau) % tau
 
+def get_color_specifier(basecolor, number):
+    color = [float(x) for x in basecolor]
+    if len(color) == 3:
+        return ('c3f', color * number)
+    elif len(color) == 4:
+        return ('c4f', color * number)
+
 def gl_thickline(startpoint, endpoint, width, color, z=0.0):
     # doesn't work dunno why
     rad = width / 2.0
@@ -42,20 +49,22 @@ def gl_thickline(startpoint, endpoint, width, color, z=0.0):
 def gl_crosshair(x, y, color=(1.0,1.0,1.0), length=10.0, gap=5.0, z=0.0):
     x = float(x)
     y = float(y)
+    colspec = get_color_specifier(color, 2)
     pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (x - (length+gap), y, z, x - gap, y, z)),
-                         ('c3f', list(itertools.chain(color, color))))
+                         colspec)
     pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (x + length+gap, y, z, x + gap, y, z)),
-                         ('c3f', list(itertools.chain(color, color))))
+                         colspec)
     pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (x, y - (length+gap), z, x, y - gap, z)),
-                         ('c3f', list(itertools.chain(color, color))))
+                         colspec)
     pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (x, y + length+gap, z, x, y + gap, z)),
-                         ('c3f', list(itertools.chain(color, color))))
+                         colspec)
 
 def gl_circle(x, y, color=(1.0,1.0,1.0), radius=10.0, z=0.0, segments=36):
     x = float(x)
     y = float(y)
 
     coords = list()
+    colspec = get_color_specifier(color, segments)
     for seg in range(0, segments):
         theta = 2.0 * math.pi * seg / segments
         segx = radius * math.cos(theta) + x
@@ -64,12 +73,12 @@ def gl_circle(x, y, color=(1.0,1.0,1.0), radius=10.0, z=0.0, segments=36):
         coords.append(segy)
         coords.append(z)
     pyglet.graphics.draw(segments, GL.GL_LINE_LOOP, ('v3f', coords),
-                         ('c3f', color*segments))
+                         colspec)
 
 def gl_filled_circle(x, y, color=(1.0,1.0,1.0), radius=10.0, z=0.0, segments=36):
     x = float(x)
     y = float(y)
-
+    colspec = get_color_specifier(color, segments+2)
     coords = [x, y, z]
     for seg in range(0, segments+1):
         theta = 2.0 * math.pi * seg / segments
@@ -79,4 +88,4 @@ def gl_filled_circle(x, y, color=(1.0,1.0,1.0), radius=10.0, z=0.0, segments=36)
         coords.append(segy)
         coords.append(z)
     pyglet.graphics.draw(segments+2, GL.GL_TRIANGLE_FAN, ('v3f', coords),
-                         ('c3f', color*(segments+2)))
+                         colspec)
