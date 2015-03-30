@@ -151,3 +151,30 @@ class GradBox(Drawable):
                                                               self.endcolor,
                                                               self.endcolor,
                                                               self.startcolor))))
+
+class FadeMixin(object):
+    ST_ON, ST_OFF, ST_FO, ST_FI = range(4)
+    def __init__(self, *args, **kwargs):
+        self.state = self.ST_ON
+
+    def toggle(self):
+        if self.state in (self.ST_ON, self.ST_FI):
+            self.state = self.ST_FO
+        else:
+            self.state = self.ST_FI
+
+    def update(self):
+        if self.state != self.ST_OFF:
+            if self.state in (self.ST_FO, self.ST_FI):
+                alpha = self.getalpha()
+                if self.state == self.ST_FO:
+                    alpha -= 0.05
+                    if alpha <= 0.0:
+                        alpha = 0.0
+                        self.state = self.ST_OFF
+                else:
+                    alpha += 0.05
+                    if alpha >= 1.0:
+                        alpha = 1.0
+                        self.state = self.ST_ON
+                self.setalpha(alpha)
