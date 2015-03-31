@@ -5,26 +5,34 @@ import math
 tau = math.pi * 2
 qtau = math.pi / 2
 
-def line_angle(startpoint, endpoint):
-    deltax = startpoint[0] - endpoint[0]
-    deltay = startpoint[1] - endpoint[1]
+# NOTE these are inefficient because they recreate the lists each frame
+# TODO make static versions of these as Drawables to exploit vertex list objects.
+# TODO make static versions that RETURN a VertexList
+# TODO make circles take start and stop angles
+# TODO make a decorator for gl line drawing routines to make alpha and whatnot work right. (implies wrapper object for static versions)
 
-    return math.atan2(deltax, deltay)
+def line_angle(startpoint, endpoint):
+    deltax = endpoint[0] - startpoint[0]
+    deltay = endpoint[1] - startpoint[1]
+    return math.atan2(deltay, deltax)
 
 def up_tangent(angle):
     return (angle + qtau) % tau
 
 def down_tangent(angle):
-    return (angle - qtau) % tau
+    return (angle + qtau + math.pi) % tau
 
 def get_color_specifier(basecolor, number):
     color = [float(x) for x in basecolor]
     if len(color) == 3:
-        return ('c3f', color * number)
+        return ('c3d', color * number)
     elif len(color) == 4:
-        return ('c4f', color * number)
+        return ('c4d', color * number)
 
 def gl_thickline(startpoint, endpoint, width, color, z=0.0):
+    GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+
     # doesn't work dunno why
     rad = width / 2.0
 
@@ -46,20 +54,33 @@ def gl_thickline(startpoint, endpoint, width, color, z=0.0):
 
     pyglet.graphics.draw(6, GL.GL_QUADS, ('v3f', coord1+coord1+coord2+coord3+coord4+coord4), ('c3f', color*6))
 
-def gl_crosshair(x, y, color=(1.0,1.0,1.0), length=10.0, gap=5.0, z=0.0):
+def gl_crosshair(x, y, color=(1.0,1.0,1.0), length=10.0, gap=5.0, z=0.0, angle=0.0):
+    GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
     y = float(y)
-    colspec = get_color_specifier(color, 2)
-    pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (x - (length+gap), y, z, x - gap, y, z)),
-                         colspec)
-    pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (x + length+gap, y, z, x + gap, y, z)),
-                         colspec)
-    pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (x, y - (length+gap), z, x, y - gap, z)),
-                         colspec)
-    pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (x, y + length+gap, z, x, y + gap, z)),
-                         colspec)
+    colspec = get_color_specifier(color, 8)
+    if angle in (0.0, 90.0, 180.0, 270.0, 360.0):
+        pyglet.graphics.draw(8, GL.GL_LINES, ('v3f', (x - (length+gap), y, z, x - gap, y, z,
+                                                      x + length+gap, y, z, x + gap, y, z,
+                                                      x, y - (length+gap), z, x, y - gap, z,
+                                                      x, y + length+gap, z, x, y + gap, z)),
+                             colspec)
+    else:
+        theta1 = angle * (math.pi / 180)
+        theta2 = ((angle + 90) % 360) * (math.pi / 180)
+        theta3 = ((angle + 180) % 360) * (math.pi / 180)
+        theta4 = ((angle + 270) % 360) * (math.pi / 180)
+        pyglet.graphics.draw(8, GL.GL_LINES, ('v3f', (x + math.cos(theta1) * gap, y + math.sin(theta1) * gap, z, x + math.cos(theta1) * (gap + length), y + math.sin(theta1) * (gap + length), z,
+                                                      x + math.cos(theta2) * gap, y + math.sin(theta2) * gap, z, x + math.cos(theta2) * (gap + length), y + math.sin(theta2) * (gap + length), z,
+                                                      x + math.cos(theta3) * gap, y + math.sin(theta3) * gap, z, x + math.cos(theta3) * (gap + length), y + math.sin(theta3) * (gap + length), z,
+                                                      x + math.cos(theta4) * gap, y + math.sin(theta4) * gap, z, x + math.cos(theta4) * (gap + length), y + math.sin(theta4) * (gap + length), z)),
+                             colspec)
+
 
 def gl_circle(x, y, color=(1.0,1.0,1.0), radius=10.0, z=0.0, segments=36):
+    GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
     y = float(y)
 
@@ -76,6 +97,8 @@ def gl_circle(x, y, color=(1.0,1.0,1.0), radius=10.0, z=0.0, segments=36):
                          colspec)
 
 def gl_filled_circle(x, y, color=(1.0,1.0,1.0), radius=10.0, z=0.0, segments=36):
+    GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
     y = float(y)
     colspec = get_color_specifier(color, segments+2)
@@ -89,3 +112,21 @@ def gl_filled_circle(x, y, color=(1.0,1.0,1.0), radius=10.0, z=0.0, segments=36)
         coords.append(z)
     pyglet.graphics.draw(segments+2, GL.GL_TRIANGLE_FAN, ('v3f', coords),
                          colspec)
+
+ARROW_STYLE_PLAIN=0
+def gl_arrow(startpoint, endpoint, color=(1.0,1.0,1.0), arrowwidth=15, z=0.0, style=ARROW_STYLE_PLAIN):
+    GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+    startpoint = [float(x) for x in startpoint]
+    endpoint = [float(x) for x in endpoint]
+    angle = line_angle(startpoint, endpoint)
+    utang = up_tangent(angle)
+    dtang = down_tangent(angle)
+    rad = arrowwidth / 2.0
+    coord1 = (endpoint[0] + (rad * math.cos(utang)), endpoint[1] + (rad * math.sin(utang)), z)
+    coord2 = (endpoint[0] + (rad * math.cos(angle)), endpoint[1] + (rad * math.sin(angle)), z)
+    coord3 = (endpoint[0] + (rad * math.cos(dtang)), endpoint[1] + (rad * math.sin(dtang)), z)
+    headcol = get_color_specifier(color, 3)
+    linecol = get_color_specifier(color, 2)
+    pyglet.graphics.draw(3, GL.GL_TRIANGLE_STRIP, ('v3f', coord1+coord2+coord3),headcol)
+    pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', (startpoint[0], startpoint[1], z, endpoint[0], endpoint[1], z)), linecol)

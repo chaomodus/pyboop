@@ -15,6 +15,7 @@ import boop.scene
 from boop.drawables import Drawable
 import boop.drawtools
 import random
+import math
 
 # menu
 #  pages
@@ -68,6 +69,10 @@ class TestLine(Drawable):
     def render(self, window):
         boop.drawtools.gl_thickline((100, 30), (30, 200), 10, (1.0,0.0,0.0))
         boop.drawtools.gl_thickline((250, 500), (150, 500), 10, (0.0,1.0,0.0))
+        x = (window.width / 2) + 200
+        y = (window.height / 2) + 200
+        for i in range(0, 100, 10):
+            boop.drawtools.gl_arrow((x, y), (x + (100 * math.cos(math.pi * 2 * (i / 100.0))), y + (100 * math.sin(math.pi * 2 * (i / 100.0)))), color=(1.0, 0.0, 1.0, 1.0))
 
 fnt = pyglet.font.load('Oxygen-Regular', 18)
 

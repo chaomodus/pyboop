@@ -70,11 +70,11 @@ class Backdrop(Image):
         # Image.render(self,display)
 
 class Label(Drawable):
-    def __init__(self, display, font,  text='',  position=(0,0), color=(1,1,1,1)):
+    def __init__(self, display, font,  text='',  position=(0,0), color=(1,1,1,1), width=None):
         Drawable.__init__(self, display)
         self.text = text
         self.position = position
-        self.txtobj = pyglet.font.Text(font, text, float(position[0]), float(position[1]), color)
+        self.txtobj = pyglet.font.Text(font, text, float(position[0]), float(position[1]), color, width=width)
         self.txtobj.z = 0.0
 
     def setalpha(self, alpha):
@@ -153,28 +153,28 @@ class GradBox(Drawable):
                                                               self.startcolor))))
 
 class FadeMixin(object):
-    ST_ON, ST_OFF, ST_FO, ST_FI = range(4)
+    FADE_ST_ON, FADE_ST_OFF, FADE_ST_FO, FADE_ST_FI = range(4)
     def __init__(self, *args, **kwargs):
-        self.state = self.ST_ON
+        self.fade_state = self.FADE_ST_ON
 
-    def toggle(self):
-        if self.state in (self.ST_ON, self.ST_FI):
-            self.state = self.ST_FO
+    def fade_toggle(self):
+        if self.fade_state in (self.FADE_ST_ON, self.FADE_ST_FI):
+            self.fade_state = self.FADE_ST_FO
         else:
-            self.state = self.ST_FI
+            self.fade_state = self.FADE_ST_FI
 
-    def update(self):
-        if self.state != self.ST_OFF:
-            if self.state in (self.ST_FO, self.ST_FI):
+    def fade_update(self):
+        if self.fade_state != self.FADE_ST_OFF:
+            if self.fade_state in (self.FADE_ST_FO, self.FADE_ST_FI):
                 alpha = self.getalpha()
-                if self.state == self.ST_FO:
+                if self.fade_state == self.FADE_ST_FO:
                     alpha -= 0.05
                     if alpha <= 0.0:
                         alpha = 0.0
-                        self.state = self.ST_OFF
+                        self.fade_state = self.FADE_ST_OFF
                 else:
                     alpha += 0.05
                     if alpha >= 1.0:
                         alpha = 1.0
-                        self.state = self.ST_ON
+                        self.fade_state = self.FADE_ST_ON
                 self.setalpha(alpha)
