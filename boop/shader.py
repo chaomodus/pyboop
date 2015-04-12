@@ -7,6 +7,11 @@
 
 from pyglet.gl import *
 
+class ShaderException(Exception):
+    def __init__(self, message, buf):
+        Exception.__init__(self,message)
+        self.buffer = buf
+
 class Shader:
     # vert, frag and geom take arrays of source strings
     # the arrays will be concattenated into one string by OpenGL
@@ -56,7 +61,7 @@ class Shader:
             # retrieve the log text
             glGetShaderInfoLog(shader, temp, None, buffer)
             # print the log to the console
-            print buffer.value
+            raise ShaderException("Compile failure.", buffer.value)
         else:
             # all is well, so attach the shader to the program
             glAttachShader(self.handle, shader);
@@ -78,7 +83,7 @@ class Shader:
             # retrieve the log text
             glGetProgramInfoLog(self.handle, temp, None, buffer)
             # print the log to the console
-            print buffer.value
+            raise ShaderException("Compile failure.", buffer.value)
         else:
             # all is well, so we are linked
             self.linked = True

@@ -82,16 +82,17 @@ mywindow = boop.BoopWindow(800,600,scene_manager=boop.scene.SceneManager())
 scene = MyScene(mywindow)
 mywindow.scene_manager.add(scene, 'test')
 
-bg = boop.drawables.Backdrop(mywindow, pyglet.image.load('backdrop.jpg',file('Sakuraecho_Alley_Nagano_Japan.jpg','r')))
+bg = boop.drawables.Backdrop(mywindow, pyglet.image.load('backdrop.jpg',open('Sakuraecho_Alley_Nagano_Japan.jpg','rb')))
 scene.add(bg)
 
 scene.add(boop.drawables.GradBox(mywindow, (0.2, 0.2, 0.9), (0.8,0.8,1.0), True, (300, 300), (100, 100)))
 scene.add(boop.drawables.GradBox(mywindow, (0.2, 0.2, 0.5), (0.8,0.8,1.0), False, (200, 300), (100, 100)))
 
-ch = boop.drawables.Image(mywindow, pyglet.image.load('char.png', file('Kemonomimi_rabbit.svg.png','r')))
+ch = boop.drawables.Image(mywindow, pyglet.image.load('char.png', open('Kemonomimi_rabbit.svg.png','rb')))
 scene.add(ch)
 
 label = boop.drawables.Label(mywindow, fnt, u"Kawaii ^.^ かわいい", (220,220))
+#label = boop.drawables.Label(mywindow, fnt, "Kawaii ^.^", (220,220))
 scene.add(label)
 
 scene.add(TestLine(mywindow))
