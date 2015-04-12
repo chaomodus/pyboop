@@ -67,14 +67,16 @@ class MyScene(boop.scene.Scene):
 
 class TestLine(Drawable):
     def render(self, window):
-        boop.drawtools.gl_thickline((100, 30), (30, 200), 10, (1.0,0.0,0.0))
-        boop.drawtools.gl_thickline((250, 500), (150, 500), 10, (0.0,1.0,0.0))
+        x = 100
+        y = 500
+        for i in range(0, 100, 10):
+            boop.drawtools.gl_thickline((x, y), (x + (100 * math.cos(math.pi * 2 * (i / 100.0))), y + (100 * math.sin(math.pi * 2 * (i / 100.0)))), i / 10, color=(1.0 - i / 100.0, i / 100.0, i / 100.0, 1.0))
         x = (window.width / 2) + 200
         y = (window.height / 2) + 200
         for i in range(0, 100, 10):
-            boop.drawtools.gl_arrow((x, y), (x + (100 * math.cos(math.pi * 2 * (i / 100.0))), y + (100 * math.sin(math.pi * 2 * (i / 100.0)))), color=(1.0, 0.0, 1.0, 1.0))
+            boop.drawtools.gl_arrow((x, y), (x + (100 * math.cos(math.pi * 2 * (i / 100.0))), y + (100 * math.sin(math.pi * 2 * (i / 100.0)))), color=(i / 100.0, i / 100.0, 1.0 - i / 100.0, 1.0))
 
-fnt = pyglet.font.load('Oxygen-Regular', 18)
+fnt = pyglet.font.load('Kochi Gothic', 18)
 
 mywindow = boop.BoopWindow(800,600,scene_manager=boop.scene.SceneManager())
 scene = MyScene(mywindow)
@@ -89,7 +91,7 @@ scene.add(boop.drawables.GradBox(mywindow, (0.2, 0.2, 0.5), (0.8,0.8,1.0), False
 ch = boop.drawables.Image(mywindow, pyglet.image.load('char.png', file('Kemonomimi_rabbit.svg.png','r')))
 scene.add(ch)
 
-label = boop.drawables.Label(mywindow, fnt, u"Kawaii ^.^", (220,220))
+label = boop.drawables.Label(mywindow, fnt, u"Kawaii ^.^ かわいい", (220,220))
 scene.add(label)
 
 scene.add(TestLine(mywindow))

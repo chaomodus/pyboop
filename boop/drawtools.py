@@ -8,6 +8,7 @@ qtau = math.pi / 2
 # NOTE these are inefficient because they recreate the lists each frame
 # TODO make static versions of these as Drawables to exploit vertex list objects.
 # TODO make static versions that RETURN a VertexList
+# TODO use memoization to cache vertex lists even in dynamic (not explicitly static) calls
 # TODO make circles take start and stop angles
 # TODO make a decorator for gl line drawing routines to make alpha and whatnot work right. (implies wrapper object for static versions)
 
@@ -29,11 +30,12 @@ def get_color_specifier(basecolor, number):
     elif len(color) == 4:
         return ('c4d', color * number)
 
-def gl_thickline(startpoint, endpoint, width, color, z=0.0):
+def gl_thickline(startpoint, endpoint, width, color=(1.0,1.0,1.0), z=0.0):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
 
-    # doesn't work dunno why
+    colspec = get_color_specifier(color, 4)
+
     rad = width / 2.0
 
     distancestart = math.sqrt(startpoint[0]**2 + startpoint[1]**2)
@@ -41,18 +43,20 @@ def gl_thickline(startpoint, endpoint, width, color, z=0.0):
     if distancestart >  distanceend:
         startpoint, endpoint = endpoint, startpoint
 
-    # debug line
-    pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', [float(x) for x in itertools.chain(startpoint, (z,), endpoint, (z,))]), ('c3f', (1.0,1.0,1.0,1.0,1.0,1.0)))
-
     angle = line_angle(startpoint, endpoint)
     utang = up_tangent(angle)
     dtang = down_tangent(angle)
-    coord1 = (startpoint[0] + rad * math.sin(utang), startpoint[0] + rad * math.cos(utang), z)
-    coord2 = (startpoint[0] + rad * math.sin(dtang), startpoint[0] + rad * math.cos(dtang), z)
-    coord3 = (endpoint[0] + rad * math.sin(utang), endpoint[0] + rad * math.cos(utang), z)
-    coord4 = (endpoint[0] + rad * math.sin(dtang), endpoint[0] + rad * math.cos(dtang), z)
 
-    pyglet.graphics.draw(6, GL.GL_QUADS, ('v3f', coord1+coord1+coord2+coord3+coord4+coord4), ('c3f', color*6))
+    coord1 = (endpoint[0] + (rad * math.cos(utang)), endpoint[1] + (rad * math.sin(utang)), z)
+    coord2 = (endpoint[0] + (rad * math.cos(dtang)), endpoint[1] + (rad * math.sin(dtang)), z)
+    coord3 = (startpoint[0] + (rad * math.cos(dtang)), startpoint[1] + (rad * math.sin(dtang)), z)
+    coord4 = (startpoint[0] + (rad * math.cos(utang)), startpoint[1] + (rad * math.sin(utang)), z)
+
+    pyglet.graphics.draw(4, GL.GL_QUADS, ('v3f', coord1+coord2+coord3+coord4), colspec)
+
+    # debug line
+    #pyglet.graphics.draw(2, GL.GL_LINES, ('v3f', [float(x) for x in itertools.chain(startpoint, (z,), endpoint, (z,))]), ('c3f', (1.0,1.0,1.0,1.0,1.0,1.0)))
+
 
 def gl_crosshair(x, y, color=(1.0,1.0,1.0), length=10.0, gap=5.0, z=0.0, angle=0.0):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
