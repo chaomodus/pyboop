@@ -1,6 +1,3 @@
-import sys
-DEBUG=False
-
 class SceneManager(object):
     def __init__(self):
         self.scenes = dict()
@@ -10,14 +7,13 @@ class SceneManager(object):
         self.cameray = 0
 
     def dispatch_event(self, event_type, window, *args):
-        ret = None
         val = None
-        DEBUG and sys.stdout.write('dispatch_event: '+str(self)+' '+str(window)+' '+str(event_type)+' '+str(args)+'\n')
         for scene in self.active_scenes:
             try:
-                val = self.scenes[scene].handle_event(event_type, window, self, *args)
-                if val is not None:
-                    ret = val
+                val = self.scenes[scene].handle_event(event_type,
+                                                      window,
+                                                      self,
+                                                      *args)
             except KeyError:
                 pass
 
@@ -60,4 +56,4 @@ class SceneManager(object):
         return self.camerax, self.cameray
 
     def reset_camera(self):
-        self.move_camera(0,0)
+        self.move_camera(0, 0)

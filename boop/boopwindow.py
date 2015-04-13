@@ -1,6 +1,6 @@
 import pyglet
 from . import component
-import time
+
 
 class BoopWindow(component.Component, pyglet.window.Window):
     def __init__(self, *args, **kwargs):
@@ -27,5 +27,7 @@ class BoopWindow(component.Component, pyglet.window.Window):
         # potentially override any event handling
         result = self.scene_manager.dispatch_event(event_type, self, *args)
         if not result:
-            result = pyglet.window.Window.dispatch_event(self, event_type, *args)
+            result = pyglet.window.Window.dispatch_event(self,
+                                                         event_type,
+                                                         *args)
         self.handle_post_event(event_type, result, *args, **kwargs)

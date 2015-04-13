@@ -1,6 +1,8 @@
 from boop.component import ComponentHost
 
-class Scene(ComponentHost): # ABC
+
+# note by default this acts just like a cbomponent host.
+class Scene(ComponentHost):  # ABC
     def __init__(self, window, *args, **kwargs):
         ComponentHost.__init__(self, *args, **kwargs)
         self.window = window
@@ -12,6 +14,8 @@ class Scene(ComponentHost): # ABC
         pass
 
     def handle_event(self, event_type, window, scene_manager, *args):
-        ComponentHost.handle_event(self, event_type, window, scene_manager, *args)
-
-    # note by default this acts just like a cbomponent host.
+        ComponentHost.handle_event(self,
+                                   event_type,
+                                   window,
+                                   scene_manager,
+                                   *args)
