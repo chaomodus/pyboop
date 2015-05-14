@@ -38,7 +38,7 @@ def get_color_specifier(basecolor, number):
         return ('c4d', color * number)
 
 
-def gl_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
+def draw_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
 
@@ -74,7 +74,7 @@ def gl_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
                          colspec)
 
 
-def gl_crosshair(x,
+def draw_crosshair(x,
                  y,
                  color=(1.0, 1.0, 1.0),
                  length=10.0,
@@ -130,7 +130,7 @@ def gl_crosshair(x,
                              colspec)
 
 
-def gl_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36):
+def draw_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
@@ -151,12 +151,12 @@ def gl_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36):
                          colspec)
 
 
-def gl_filled_circle(x,
-                     y,
-                     color=(1.0, 1.0, 1.0),
-                     radius=10.0,
-                     z=0.0,
-                     segments=36):
+def draw_filled_circle(x,
+                       y,
+                       color=(1.0, 1.0, 1.0),
+                       radius=10.0,
+                       z=0.0,
+                       segments=36):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
@@ -174,7 +174,7 @@ def gl_filled_circle(x,
                          colspec)
 
 
-def gl_arrow(startpoint,
+def draw_arrow(startpoint,
              endpoint,
              color=(1.0, 1.0, 1.0),
              arrowwidth=15,
@@ -210,3 +210,56 @@ def gl_arrow(startpoint,
                           (startpoint[0], startpoint[1], z,
                            endpoint[0], endpoint[1], z)),
                          linecol)
+
+
+def draw_gradbox(startcolor=(0.0, 0.0, 0.0),
+                 endcolor=(0.0, 0.0, 0.0),
+                 vertical=True,
+                 position=(0, 0),
+                 size=(0, 0),
+                 z=0.0):
+    z = float(z)
+    startcoords = [float(x) for x in position]
+    endcoords = [float(x + y) for x, y in zip(position, size)]
+    if len(startcolor) == 4:
+        colspec = 'c4f'
+    else:
+        colspec = 'c3f'
+    if vertical:
+        pyglet.graphics.draw(4, GL.GL_QUADS,
+                             ('v3f', (startcoords[0],
+                                      startcoords[1],
+                                      z,
+                                      startcoords[0],
+                                      endcoords[1],
+                                      z,
+                                      endcoords[0],
+                                      endcoords[1],
+                                      z,
+                                      endcoords[0],
+                                      startcoords[1],
+                                      z)),
+                             (colspec,
+                              startcolor +
+                              startcolor +
+                              endcolor +
+                              endcolor))
+    else:
+        pyglet.graphics.draw(4, GL.GL_QUADS,
+                             ('v3f', (startcoords[0],
+                                      startcoords[1],
+                                      z,
+                                      startcoords[0],
+                                      endcoords[1],
+                                      z,
+                                      endcoords[0],
+                                      endcoords[1],
+                                      z,
+                                      endcoords[0],
+                                      startcoords[1],
+                                      z)),
+                             (colspec,
+                              startcolor +
+                              endcolor +
+                              endcolor +
+                              startcolor))

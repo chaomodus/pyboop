@@ -5,7 +5,7 @@ class Component(ComponentHost):
     def __init__(self):
         ComponentHost.__init__(self)
 
-    def handle_event(self, event_type, *args, **kwargs):
+    def handle_event(self, event_type, state, *args, **kwargs):
         evthandler = None
         try:
             evthandler = self.__getattribute__('do_'+event_type)
@@ -16,6 +16,6 @@ class Component(ComponentHost):
                 # no handler
                 pass
         if evthandler:
-            evthandler(self, *args, **kwargs)
+            evthandler(state, *args, **kwargs)
 
-        return ComponentHost.handle_event(self, event_type, *args)
+        return ComponentHost.handle_event(self, event_type, state, *args)

@@ -1,6 +1,6 @@
 import pyglet
 from . import component
-
+from . import events
 
 class BoopWindow(component.Component, pyglet.window.Window):
     def __init__(self, *args, **kwargs):
@@ -11,6 +11,10 @@ class BoopWindow(component.Component, pyglet.window.Window):
         except KeyError:
             self.scene_manager = None
 
+        self.eventstate = events.EventStateHolder()
+        self.eventstate.window = self
+        # dragging objects set True and other objects may ignore
+        self.dragging_veto = False
         pyglet.window.Window.__init__(self, *args, **kwargs)
 
     def handle_pre_event(event_type, *args, **kwargs):
@@ -25,9 +29,13 @@ class BoopWindow(component.Component, pyglet.window.Window):
         if self.handle_pre_event(event_type, *args, **kwargs):
             return True
         # potentially override any event handling
-        result = self.scene_manager.dispatch_event(event_type, self, *args)
+        result = self.scene_manager.dispatch_event(event_type, self.eventstate, *args)
         if not result:
             result = pyglet.window.Window.dispatch_event(self,
                                                          event_type,
                                                          *args)
         self.handle_post_event(event_type, result, *args, **kwargs)
+
+
+for event in events.boop_events:
+    BoopWindow.register_event_type(event)

@@ -1,18 +1,18 @@
 class SceneManager(object):
     def __init__(self):
         self.scenes = dict()
-        self.active_scenes = set()
+        self.active_scenes = list()
 
         self.camerax = 0
         self.cameray = 0
 
-    def dispatch_event(self, event_type, window, *args):
+    def dispatch_event(self, event_type, state, *args):
         val = None
+        state.scene_manger = self
         for scene in self.active_scenes:
             try:
                 val = self.scenes[scene].handle_event(event_type,
-                                                      window,
-                                                      self,
+                                                      state,
                                                       *args)
             except KeyError:
                 pass
@@ -25,7 +25,7 @@ class SceneManager(object):
     def activate(self, scene):
         try:
             self.scenes[scene].activate(self)
-            self.active_scenes.add(scene)
+            self.active_scenes.append(scene)
         except KeyError:
             pass
 

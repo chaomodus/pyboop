@@ -13,9 +13,10 @@ class Scene(ComponentHost):  # ABC
     def defactivate(self, manager):
         pass
 
-    def handle_event(self, event_type, window, scene_manager, *args):
+    def handle_event(self, event_type, state, *args, **kwargs):
+        if state:
+            state.scene = self
         ComponentHost.handle_event(self,
                                    event_type,
-                                   window,
-                                   scene_manager,
-                                   *args)
+                                   state,
+                                   *args, **kwargs)
