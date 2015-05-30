@@ -57,6 +57,8 @@ scene.add(bg)
 scene.add(boop.drawables.DrawWrapper(mywindow, boop.drawtools.draw_gradbox, (0.2, 0.2, 0.9), (0.8, 0.8, 1.0), True, (300, 300), (100, 100)))
 scene.add(boop.drawables.DrawWrapper(mywindow, boop.drawtools.draw_gradbox, (0.2, 0.2, 0.5), (0.8, 0.8, 1.0), False, (200, 300), (100, 100)))
 
+scene.add(boop.drawables.DrawWrapper(mywindow, boop.drawtools.draw_circle_annulus, 300, 300, (1.0, 0.0, 0.0)))
+
 ch = boop.drawables.DraggableImage(mywindow, pyglet.image.load('char.png', open('Kemonomimi_rabbit.svg.png','rb')))
 ch.setpos(50,50)
 scene.add(ch)

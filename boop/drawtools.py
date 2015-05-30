@@ -173,6 +173,31 @@ def draw_filled_circle(x,
     pyglet.graphics.draw(segments+2, GL.GL_TRIANGLE_FAN, ('v3f', coords),
                          colspec)
 
+def draw_circle_annulus(x,
+                        y,
+                        color=(1.0, 1.0, 1.0),
+                        radius_inner=5.0,
+                        radius_outer=10.0,
+                        z=0.0,
+                        segments=36):
+    GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+    x = float(x)
+    y = float(y)
+    coords = []
+    for seg in range(0, segments+1):
+        theta = 2 * math.pi * seg / segments
+        coords.append(x + math.cos(theta) * radius_inner)
+        coords.append(y + math.sin(theta) * radius_inner)
+        coords.append(z)
+
+        coords.append(x + math.cos(theta) * radius_outer)
+        coords.append(y + math.sin(theta) * radius_outer)
+        coords.append(z)
+    colspec = get_color_specifier(color, len(coords) / 3)
+    pyglet.graphics.draw(len(coords) / 3, GL.GL_TRIANGLE_STRIP, ('v3f', coords),
+                         colspec)
+
 
 def draw_arrow(startpoint,
              endpoint,

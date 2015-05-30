@@ -110,8 +110,6 @@ class Image(Drawable):
         Drawable.__init__(self, display)
         self.spr = pyglet.sprite.Sprite(imgobj)
         self.spr.z = 0.0
-        self.spr.anchor_x = 0
-        self.spr.anchor_y = 0
         self.setpos(*position)
 
     def getpos(self):
@@ -148,8 +146,8 @@ class Image(Drawable):
             # debug crosshair
             pos = self.spr.position
             # red crosshair indicates anchor position
-            drawtools.draw_crosshair(pos[0] + self.spr.anchor_x,
-                                     pos[1] + self.spr.anchor_y,
+            drawtools.draw_crosshair(pos[0],
+                                     pos[1],
                                      color=(1.0, 0.0, 0.0))
             # cyan crosshair indicates sprite position (should be the same
             # as drawable position)
