@@ -3,8 +3,8 @@
 #
 """PyBoop - A fun 2d Game Engine built on top of Pyglet."""
 
-version='alpha6'
-version_info=(0,0,6)
+version='alpha7'
+version_info=(0,0,7)
 
 from . import component
 from .boopwindow import BoopWindow

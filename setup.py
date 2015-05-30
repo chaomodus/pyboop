@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='pyboop',
-      version='alpha6',
+      version='alpha7',
       description='A friendly fun 2d game engine built on Pyglet.',
       url='https://www.github.com/pyboop',
       author='Cas Rusnov',
