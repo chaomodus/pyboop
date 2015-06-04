@@ -1,10 +1,10 @@
-from boop.component import ComponentHost
+from boop.component import Component
 
 
-# note by default this acts just like a cbomponent host.
-class Scene(ComponentHost):  # ABC
+# note by default this acts just like a cbomponent host / component.
+class Scene(Component):
     def __init__(self, window, *args, **kwargs):
-        ComponentHost.__init__(self, *args, **kwargs)
+        Component.__init__(self, *args, **kwargs)
         self.window = window
 
     def activate(self, manager):
@@ -16,7 +16,7 @@ class Scene(ComponentHost):  # ABC
     def handle_event(self, event_type, state, *args, **kwargs):
         if state:
             state.scene = self
-        ComponentHost.handle_event(self,
-                                   event_type,
-                                   state,
-                                   *args, **kwargs)
+        Component.handle_event(self,
+                               event_type,
+                               state,
+                               *args, **kwargs)

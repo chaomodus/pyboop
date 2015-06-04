@@ -34,7 +34,7 @@ class BoopWindow(component.Component, pyglet.window.Window):
             result = pyglet.window.Window.dispatch_event(self,
                                                          event_type,
                                                          *args)
-        self.handle_post_event(event_type, result, *args, **kwargs)
+        return self.handle_post_event(event_type, result, *args, **kwargs)
 
 
 for event in events.boop_events:
