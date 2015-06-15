@@ -15,7 +15,8 @@ class SceneManager(object):
                                                       state,
                                                       *args)
             except KeyError:
-                pass
+                raise
+
 
         return val
 

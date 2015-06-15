@@ -1,9 +1,12 @@
 import pyglet.graphics
 import pyglet.gl as GL
+import ctypes
+import itertools
 import math
 tau = math.pi * 2
 qtau = math.pi / 2
 ARROW_STYLE_PLAIN = 0
+POLY_CORNER_CHAMFER = 0
 
 # NOTE these are inefficient because they recreate the lists each frame
 # TODO make static versions of these as Drawables to exploit vertex list
@@ -14,6 +17,13 @@ ARROW_STYLE_PLAIN = 0
 # TODO make circles take start and stop angles
 # TODO make a decorator for gl line drawing routines to make alpha and whatnot
 #      work right. (implies wrapper object for static versions)
+#
+# TODO add corner mapping for gradbox so that each corner can have
+#      a separate color rather than just 2 colors in a range
+# TODO make draw_polyline to replace draw_thickline and take width
+#      argument. Deal with stitching corners and corner options.
+# TODO make draw_polyline_loop as above but loops
+# TODO make draw_filled_poly that tesselates area defined by vertex list.
 
 
 def line_angle(startpoint, endpoint):
@@ -37,6 +47,15 @@ def get_color_specifier(basecolor, number):
     elif len(color) == 4:
         return ('c4d', color * number)
 
+
+# this will someday draw nice polylines with corners and whatnot.
+# we will also make an effort to guarantee lack of overdraw.
+def draw_polyline(vertices, color=(1.0,1.0,1.0), width=1.0, z=0.0, corner_style=POLY_CORNER_CHAMFER):
+    lastvert = None
+    for vert in vertices:
+        if lastvert:
+            draw_thickline(lastvert, vert, width, color, z)
+        lastvert = vert
 
 def draw_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
@@ -75,12 +94,12 @@ def draw_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
 
 
 def draw_crosshair(x,
-                 y,
-                 color=(1.0, 1.0, 1.0),
-                 length=10.0,
-                 gap=5.0,
-                 z=0.0,
-                 angle=0.0):
+                   y,
+                   color=(1.0, 1.0, 1.0),
+                   length=10.0,
+                   gap=5.0,
+                   z=0.0,
+                   angle=0.0):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
@@ -173,6 +192,7 @@ def draw_filled_circle(x,
     pyglet.graphics.draw(segments+2, GL.GL_TRIANGLE_FAN, ('v3f', coords),
                          colspec)
 
+
 def draw_circle_annulus(x,
                         y,
                         color=(1.0, 1.0, 1.0),
@@ -195,16 +215,17 @@ def draw_circle_annulus(x,
         coords.append(y + math.sin(theta) * radius_outer)
         coords.append(z)
     colspec = get_color_specifier(color, len(coords) / 3)
-    pyglet.graphics.draw(len(coords) / 3, GL.GL_TRIANGLE_STRIP, ('v3f', coords),
+    pyglet.graphics.draw(len(coords) / 3, GL.GL_TRIANGLE_STRIP,
+                         ('v3f', coords),
                          colspec)
 
 
 def draw_arrow(startpoint,
-             endpoint,
-             color=(1.0, 1.0, 1.0),
-             arrowwidth=15,
-             z=0.0,
-             style=ARROW_STYLE_PLAIN):
+               endpoint,
+               color=(1.0, 1.0, 1.0),
+               arrowwidth=15,
+               z=0.0,
+               style=ARROW_STYLE_PLAIN):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     startpoint = [float(x) for x in startpoint]
@@ -288,3 +309,34 @@ def draw_gradbox(startcolor=(0.0, 0.0, 0.0),
                               endcolor +
                               endcolor +
                               startcolor))
+
+
+def draw_box(color=(0.0, 0.0, 0.0),
+             position=(0, 0),
+             size=(0, 0),
+             z=0.0,
+             width=1):
+    z = float(z)
+    startcoords = [float(x) for x in position]
+    endcoords = [float(x + y) for x, y in zip(position, size)]
+    if (not width == 1):
+        draw_thickline(startcoords, (startcoords[0], endcoords[1]), width, color)
+        draw_thickline((startcoords[0], endcoords[1]), endcoords, width, color)
+        draw_thickline(endcoords, (endcoords[0], startcoords[1]), width, color)
+        draw_thickline((endcoords[0], startcoords[1]), startcoords, width, color)
+    else:
+        colspec = get_color_specifier(color, 4)
+        pyglet.graphics.draw(4, GL.GL_LINE_LOOP,
+                             ('v3f', (startcoords[0],
+                                      startcoords[1],
+                                      z,
+                                      startcoords[0],
+                                      endcoords[1],
+                                      z,
+                                      endcoords[0],
+                                      endcoords[1],
+                                      z,
+                                      endcoords[0],
+                                      startcoords[1],
+                                      z)),
+                             colspec)

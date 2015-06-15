@@ -15,6 +15,7 @@ import boop.scene
 from boop.drawables import Drawable
 import boop.drawtools
 import math
+import random
 
 class MyScene(boop.scene.Scene):
     def __init__(self, window):
@@ -46,8 +47,13 @@ class TestLine(Drawable):
         for i in range(0, 100, 10):
             boop.drawtools.draw_arrow((x, y), (x + (100 * math.cos(math.pi * 2 * (i / 100.0))), y + (100 * math.sin(math.pi * 2 * (i / 100.0)))), color=(i / 100.0, i / 100.0, 1.0 - i / 100.0, 1.0))
 
+config = pyglet.gl.Config(sample_buffers=1,
+                          samples=4,
+                          double_buffer=1,
+                          depth_size=8)
+
 fnt = pyglet.font.load('Kochi Gothic', 18)
-mywindow = boop.BoopWindow(800,600,scene_manager=boop.scene.SceneManager())
+mywindow = boop.BoopWindow(800,600,scene_manager=boop.scene.SceneManager(), config=config)
 scene = MyScene(mywindow)
 mywindow.scene_manager.add(scene, 'test')
 
@@ -62,6 +68,8 @@ scene.add(boop.drawables.DrawWrapper(mywindow, boop.drawtools.draw_circle_annulu
 ch = boop.drawables.DraggableImage(mywindow, pyglet.image.load('char.png', open('Kemonomimi_rabbit.svg.png','rb')))
 ch.setpos(50,50)
 scene.add(ch)
+
+scene.add(boop.drawables.DrawWrapper(mywindow, boop.drawtools.draw_polyline, ((random.randint(0, mywindow.width), random.randint(0, mywindow.height)), (random.randint(0, mywindow.width), random.randint(0, mywindow.height)), (random.randint(0, mywindow.width), random.randint(0, mywindow.height))), (1.0, 0.0, 0.0), 10))
 
 label = boop.drawables.Label(mywindow, fnt, u"Kawaii ^.^ かわいい", (220,220))
 scene.add(label)

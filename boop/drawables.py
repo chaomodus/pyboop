@@ -27,6 +27,14 @@ class Drawable(Component):
     def getpos(self):
         return self.position
 
+    @property
+    def x(self):
+        return self.getpos()[0]
+
+    @property
+    def y(self):
+        return self.getpos()[1]
+
     def setpos(self, x, y):
         self.position = (x, y)
 
@@ -181,7 +189,7 @@ class Label(Drawable):
                  font,
                  text='',
                  position=(0, 0),
-                 color=(1, 1, 1, 1),
+                 color=(1.0, 1.0, 1.0, 1.0),
                  width=None):
         Drawable.__init__(self, display)
         self.text = text
