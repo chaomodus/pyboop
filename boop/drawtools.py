@@ -57,7 +57,22 @@ def draw_polyline(vertices, color=(1.0,1.0,1.0), width=1.0, z=0.0, corner_style=
             draw_thickline(lastvert, vert, width, color, z)
         lastvert = vert
 
+def draw_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0):
+    GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+
+    colspec = get_color_specifier(color, 2)
+    pyglet.graphics.draw(2,
+                         GL.GL_LINES,
+                         ('v3f', startpoint+(z, )+endpoint+(z ,)),
+                         colspec)
+
+
+
 def draw_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
+    if width == 1:
+        return draw_line(startpoint, endpoint, color, z)
+
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
 
@@ -256,6 +271,10 @@ def draw_arrow(startpoint,
                           (startpoint[0], startpoint[1], z,
                            endpoint[0], endpoint[1], z)),
                          linecol)
+
+
+def draw_filled_box(color, position, size, z=0.0):
+    return draw_gradbox(color, color, position=position, size=size, z=z)
 
 
 def draw_gradbox(startcolor=(0.0, 0.0, 0.0),

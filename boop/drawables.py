@@ -3,6 +3,7 @@ import pyglet.font
 import pyglet.graphics
 import pyglet.gl as GL
 from .component import Component
+from .drag import DragMixin
 from . import drawtools
 
 # FIXME all of this crap should use static vertex lists. We should also
@@ -84,30 +85,26 @@ class DrawWrapper(Drawable):
         self.drawtool(*self.dt_args, **self.dt_kwargs)
 
 
-class DragMixin(object):
-    _dragging = False
-    _dragoffset = (0, 0)
+class DraggableDrawableMixin(DragMixin):
+    _ddm_offset = (0, 0)
 
-    def on_mouse_drag(self, state, x, y, dx, dy, buttons, modifiers):
-        if (buttons & pyglet.window.mouse.LEFT) and not self._dragging and self.point_hit_test(x, y) and not state.window.dragging_veto:
-            self._dragging = True
-            state.window.dragging_veto = self
-            px, py = self.getpos()
-            self._dragoffset = (px - x, py - y)
-        elif self._dragging:
-            if not (buttons & pyglet.window.mouse.LEFT):
-                self._dragging = False
-            else:
-                self.setpos(x+self._dragoffset[0], y+self._dragoffset[1])
+    def can_drag(self, state, x, y):
+        return self.point_hit_test(x, y)
 
-    def on_mouse_release(self, state, x, y, buttons, modifiers):
-        if buttons & pyglet.window.mouse.LEFT:
-            self._dragging = False
-            if state.window.dragging_veto is self:
-                state.window.dragging_veto = False
-            state.handled = True
+    def start_drag(self, state, x, y):
+        px, py = self.getpos()
+        self._ddm_offset = (px - x, py - y)
+        return True
+
+    def end_drag(self, state, x, y):
+        self.setpos(x+self._ddm_offset[0], y+self._ddm_offset[1])
+        self._ddm_offset = (0, 0)
+
+    def dragging(self, state, x, y):
+        self.setpos(x+self._ddm_offset[0], y+self._ddm_offset[1])
 
 
+# Proof of concept, probably not a good thing to actually use.
 class Clear(Drawable):
     def render(self, window):
         window.clear()
@@ -200,6 +197,9 @@ class Label(Drawable):
                                        float(position[1]),
                                        color,
                                        width=width)
+        if len(color) != 4:
+            color = (color[0], color[1], color[2], 1.0)
+        self.txtobj.color = color
         self.txtobj.z = 0.0
 
     def setalpha(self, alpha):
@@ -246,7 +246,7 @@ class FadeMixin(object):
                 self.setalpha(alpha)
 
 
-class DraggableImage(Image, DragMixin):
+class DraggableImage(Image, DraggableDrawableMixin):
     def __init__(self, window, image):
+        DraggableDrawableMixin.__init__(self)
         Image.__init__(self, window, image)
-        DragMixin.__init__(self)
