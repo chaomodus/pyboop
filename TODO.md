@@ -1,12 +1,19 @@
 * Replace old (removed) event debugging with an integrated event debugging system.
 
-* Include a keyboard/mouse mapping system in the Window or Scene object-including
-  current state management and impulse emission (indirect keyboard events).
+* HIGH PRIORITY: Include a keyboard/mouse mapping system in the Window or Scene
+  object-including current state management and impulse emission (indirect keyboard
+  events).
 
-* Include a registry in scene and window objects to record small bits of information
-  for sharing between Drawables, etc. Migrate dragging override to this registry.
+* HIGH PRIORITY: Include a registry in scene and window objects to record small
+  bits of information for sharing between Drawables, etc. Migrate dragging override
+  to this registry.
+
   Introduce standard registry keys that all games share. This is also where we'd
-  stick game metadata, player data, etc.
+  stick game metadata, player data, etc. There is a stub for the registry, I'd
+  like it to be a dict-like object with 'aspects' which are sets of keys that are
+  managed downstream, and can be popped and pushed as gamestate changes. This would
+  obviously be tied to the scene management stuff very heavily (which needs
+  revisiting).
 
 * Include settings, post-run screen resize support, settings menu.
 
@@ -30,9 +37,14 @@
   event infrastructure [eg no user code would change, just everything gets
   faster].
 
-* Implement the numerous TODOs in drawtools and drawables. Biggest is using
-  static vertex lists for caching draws - this should allow a huge framerate
-  boost in games which use draw routines heavily (Soundwell).
+* Implement the numerous TODOs in drawtools and drawables. Basic support for
+  vertex lists is in place, but we should create a magic Batch object which
+  contains a vertex list, allowing them to be accessed ex-post-facto (and
+  modified).
+
+* Fix drawtools so that the actual parts that calculate crap are separate
+  from the parts that create the batch objects or perform the draw routines
+  (so that the calculation can be shared between make* and draw*).
 
 * Make a 1 checkout distribution system to get all of the libraries in one
   place for building binary distributions. (Collect all libraries in one

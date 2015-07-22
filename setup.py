@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='pyboop',
-      version='0.0a8',
+      version='0.0a9',
       description='A friendly fun 2d game engine built on Pyglet.',
       url='https://www.github.com/chaomodus/pyboop',
       author='Cas Rusnov',

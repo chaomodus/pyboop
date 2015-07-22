@@ -10,25 +10,28 @@ class BoopWindow(component.Component, pyglet.window.Window):
             del kwargs['scene_manager']
         except KeyError:
             self.scene_manager = None
-
-        self.eventstate = events.EventStateHolder()
-        self.eventstate.window = self
+        self.registry = dict() # fixme we need a sort of magic dict that gets
+                               # connected to global subhandlers somehow, with
+                               # poppable/pushable aspect management.
+        self._eventstate = events.EventStateHolder()
+        self._eventstate.window = self
+        self._eventstate.registry = self._registry
         # dragging objects set True and other objects may ignore
         self.dragging_veto = False
-        self.exclusive_handlers = dict()
+        self._exclusive_handlers = dict()
         pyglet.window.Window.__init__(self, *args, **kwargs)
 
     def emit_tick(self, tm):
         self.dispatch_event('on_tick', tm)
 
     def push_bind_exclusive(self, event_type, handler):
-        self.exclusive_handlers.setdefault(event_type, [])
-        self.exclusive_handlers[event_type].append(handler)
+        self._exclusive_handlers.setdefault(event_type, [])
+        self._exclusive_handlers[event_type].append(handler)
 
     def pop_bind_exclusive(self, event_type, handler):
-        if event_type in self.exclusive_handlers:
-            if handler in self.exclusive_handlers[event_type]:
-                self.exclusive_handlers[event_type].remove(handler)
+        if event_type in self._exclusive_handlers:
+            if handler in self._exclusive_handlers[event_type]:
+                self._exclusive_handlers[event_type].remove(handler)
 
     def handle_pre_event(self, event_type, *args, **kwargs):
         pass
@@ -42,14 +45,16 @@ class BoopWindow(component.Component, pyglet.window.Window):
         if self.handle_pre_event(event_type, *args, **kwargs):
             return True
         # potentially override any event handling
-        if event_type in self.exclusive_handlers and self.exclusive_handlers[event_type]:
+        if event_type in self._exclusive_handlers and self._exclusive_handlers[event_type]:
             # FIXME we need to rationalize how this propogates, because we are skipping descendent
             # handlers, so we kind of are doing the protocol that scenes implement and should
             # not do that (we should call exactly like dispatch_event, and let downstream
             # handle translating to a regular event handhler).
-            result = self.exclusive_handlers[event_type][-1](self.eventstate, *args, **kwargs)
+            #
+            # Maybe we should just pass the exclusie handler in the state object?
+            result = self._exclusive_handlers[event_type][-1](self._eventstate, *args, **kwargs)
         else:
-            result = self.scene_manager.dispatch_event(event_type, self.eventstate, *args, **kwargs)
+            result = self.scene_manager.dispatch_event(event_type, self._eventstate, *args, **kwargs)
         if not result:
             result = pyglet.window.Window.dispatch_event(self,
                                                          event_type,

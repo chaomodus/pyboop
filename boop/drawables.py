@@ -250,3 +250,14 @@ class DraggableImage(Image, DraggableDrawableMixin):
     def __init__(self, window, image):
         DraggableDrawableMixin.__init__(self)
         Image.__init__(self, window, image)
+
+
+class ClockDisplay(Drawable):
+    #fixme apparently this is inaccurate according to docs. newer pyglet has fix.
+    # fixme map normal drawable parms to this (fps.label is a regular label object).
+    def __init__(self, window, *args, **kwargs):
+        Drawable.__init__(self, window)
+        self.fps = pyglet.clock.ClockDisplay(*args, **kwargs)
+
+    def render(self, *args, **kwargs):
+        self.fps.draw()

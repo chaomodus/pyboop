@@ -4,7 +4,8 @@ boop_events = ['on_tick',
                'on_activate',
                'on_decativate',
                'on_movecamera',
-               'on_mouseover',]
+               'on_mouseover',
+               'on_impulse', ]
 
 
 class EventStateHolder(object):
@@ -12,6 +13,7 @@ class EventStateHolder(object):
     handled = False
     # Set by the window when the event is issued
     window = None
+    registry = None
     # Set by the scene manager when the event is issued.
     scene_manager = None
     # Set by the scene
