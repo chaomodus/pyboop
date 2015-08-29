@@ -49,3 +49,5 @@
 * Make a 1 checkout distribution system to get all of the libraries in one
   place for building binary distributions. (Collect all libraries in one
   place - add pyeuclid as standard).
+
+* Some sort of status / log / display framework for loading and whatnot.

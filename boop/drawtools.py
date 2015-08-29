@@ -3,6 +3,7 @@ import pyglet.gl as GL
 import ctypes
 import itertools
 import math
+from .batchdraw import BatchDraw
 tau = math.pi * 2
 qtau = math.pi / 2
 ARROW_STYLE_PLAIN = 0
@@ -57,7 +58,7 @@ def draw_polyline(vertices, color=(1.0,1.0,1.0), width=1.0, z=0.0, corner_style=
 def make_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0, batch=None):
     colspec = get_color_specifier(color, 2)
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
 
@@ -85,7 +86,7 @@ def make_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0, ba
         return make_line(startpoint, endpoint, color, z, batch)
 
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
 
@@ -170,7 +171,7 @@ def make_crosshair(x,
                    angle=0.0,
                    batch=None):
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
 
@@ -281,7 +282,7 @@ def draw_crosshair(x,
 
 def make_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36, batch=None):
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
 
@@ -335,7 +336,7 @@ def make_filled_circle(x,
                        batch=None):
 
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
     x = float(x)
@@ -389,7 +390,7 @@ def make_circle_annulus(x,
                         segments=36,
                         batch=None):
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
     x = float(x)
@@ -448,7 +449,7 @@ def make_arrow(startpoint,
                style=ARROW_STYLE_PLAIN,
                batch=None):
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
     startpoint = [float(x) for x in startpoint]
@@ -537,7 +538,7 @@ def make_gradbox(startcolor=(0.0, 0.0, 0.0),
                  z=0.0,
                  batch=None):
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
 
@@ -652,7 +653,7 @@ def make_box(color=(0.0, 0.0, 0.0),
              width=1,
              batch=None):
     if batch is None:
-        mybatch = pyglet.graphics.Batch()
+        mybatch = BatchDraw()
     else:
         mybatch = batch
     z = float(z)

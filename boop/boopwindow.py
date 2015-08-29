@@ -2,17 +2,17 @@ import pyglet
 from . import component
 from . import events
 
-class BoopWindow(component.Component, pyglet.window.Window):
+
+class BoopWindow(component.ComponentHost, pyglet.window.Window):
+    _registry = {}
+
     def __init__(self, *args, **kwargs):
-        component.Component.__init__(self)
+        component.ComponentHost.__init__(self)
         try:
             self.scene_manager = kwargs['scene_manager']
             del kwargs['scene_manager']
         except KeyError:
             self.scene_manager = None
-        self.registry = dict() # fixme we need a sort of magic dict that gets
-                               # connected to global subhandlers somehow, with
-                               # poppable/pushable aspect management.
         self._eventstate = events.EventStateHolder()
         self._eventstate.window = self
         self._eventstate.registry = self._registry
@@ -55,6 +55,8 @@ class BoopWindow(component.Component, pyglet.window.Window):
             result = self._exclusive_handlers[event_type][-1](self._eventstate, *args, **kwargs)
         else:
             result = self.scene_manager.dispatch_event(event_type, self._eventstate, *args, **kwargs)
+            # low level event handlers
+            component.ComponentHost.handle_event(self, event_type, self._eventstate, *args, **kwargs)
         if not result:
             result = pyglet.window.Window.dispatch_event(self,
                                                          event_type,

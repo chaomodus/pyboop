@@ -1,5 +1,21 @@
 # ChangeLog
 
+## [Unreleased] [Unreleased]
+
+Batch drawables. Better keyboard management.
+
+### Added
+- Added keyboardmanager, and mechanics for managing key bindings, aliases and
+  second-order keyboard events.
+- Added temporary _registry item to BoopWindow to act as the registry until
+  we formalize it.
+
+### Changes
+- Changed make_* routines to return a special BatchDraw obect which implements
+  parts of the Drawable protocol (and is a full drawable). It could conceivably
+  implement the entire protocol.
+- Make BoopWindow call its own handler so that its direct children can recieve events.
+
 ## [0.0a9] - 2015-07-21 - chaomodus
 
 Vertex lists, oh my!

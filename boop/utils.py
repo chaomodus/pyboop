@@ -15,3 +15,6 @@ def point_in_rectangle(point, rect_bottom_corner, rect_dimensions):
         point[0] <= rect_top_corner[0] and \
         point[1] >= rect_bottom_corner[1] and \
         point[1] <= rect_top_corner[1]
+
+def chunker(seq, size):
+    return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
