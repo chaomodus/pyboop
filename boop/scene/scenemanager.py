@@ -16,8 +16,6 @@ class SceneManager(object):
                                                       *args)
             except KeyError:
                 raise
-
-
         return val
 
     def add(self, sceneobject, scene):

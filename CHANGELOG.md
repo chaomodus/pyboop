@@ -2,13 +2,14 @@
 
 ## [Unreleased] [Unreleased]
 
-Batch drawables. Better keyboard management.
+Batch drawables. Better keyboard management. LayeredDict.
 
 ### Added
 - Added keymanager, and mechanics for managing key bindings, aliases and
   second-order keyboard events.
-- Added temporary _registry item to BoopWindow to act as the registry until
-  we formalize it.
+- Added a LayeredDict object for storing registry like data.
+- Added a _registry attribute to boopwindow. Access from the event state as the
+  registry member.
 
 ### Changes
 - Changed make_* routines to return a special BatchDraw obect which implements

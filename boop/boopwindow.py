@@ -1,12 +1,14 @@
 import pyglet
 from . import component
 from . import events
+from . import layereddict
 
 
 class BoopWindow(component.ComponentHost, pyglet.window.Window):
-    _registry = {}
-
     def __init__(self, *args, **kwargs):
+        self._registry = layereddict.LayeredDict()
+        self._registry.push({}, 'root')
+
         component.ComponentHost.__init__(self)
         try:
             self.scene_manager = kwargs['scene_manager']

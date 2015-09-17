@@ -1,14 +1,10 @@
+* TextArea object.
+
+* Scrollable area object.
+
 * Replace old (removed) event debugging with an integrated event debugging system.
 
-* HIGH PRIORITY: Include a keyboard/mouse mapping system in the Window or Scene
-  object-including current state management and impulse emission (indirect keyboard
-  events).
-
-* HIGH PRIORITY: Include a registry in scene and window objects to record small
-  bits of information for sharing between Drawables, etc. Migrate dragging override
-  to this registry.
-
-  Introduce standard registry keys that all games share. This is also where we'd
+* Introduce standard registry keys that all games share. This is also where we'd
   stick game metadata, player data, etc. There is a stub for the registry, I'd
   like it to be a dict-like object with 'aspects' which are sets of keys that are
   managed downstream, and can be popped and pushed as gamestate changes. This would
