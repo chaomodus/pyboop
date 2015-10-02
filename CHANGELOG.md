@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [Unreleased] [Unreleased]
+## [0.0a10] - 2015-10-01 - chaomodus
 
 Batch drawables. Better keyboard management. LayeredDict.
 
