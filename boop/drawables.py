@@ -21,7 +21,7 @@ class DrawWrapper(Drawable):
         self.dt_kwargs = kwargs
         self.display = display
 
-    def render(self, display):
+    def do_render(self, display):
         self.drawtool(*self.dt_args, **self.dt_kwargs)
 
 
@@ -46,7 +46,7 @@ class DraggableDrawableMixin(DragMixin):
 
 # Proof of concept, probably not a good thing to actually use.
 class Clear(Drawable):
-    def render(self, window):
+    def do_render(self, window):
         window.clear()
 
 
@@ -63,7 +63,7 @@ class Image(Drawable):
 
     def setpos(self, x, y):
         Drawable.setpos(self, x, y)
-        self.spr.position = (x, y)
+        # self.spr.position = (x, y)
 
     def rotate(self, rotation):
         self.spr.rotation = float(rotation)
@@ -79,7 +79,7 @@ class Image(Drawable):
     def getsize(self):
         return self.spr.width, self.spr.height
 
-    def render(self, display):
+    def do_render(self, display):
         # self.spr.x = float(self.position[0])
         # self.spr.y = float(self.position[1])
         # self.spr.z = 0.0
@@ -110,7 +110,7 @@ class Backdrop(Image):
             scale = display.height / float(self.spr.height)
         self.spr.scale = scale
 
-    def render(self, display):
+    def do_render(self, display):
         # if self.spr.width > self.spr.height:
         #     scale = display.width / float(self.spr.width)
         # else:
@@ -133,8 +133,8 @@ class Label(Drawable):
         self.position = position
         self.txtobj = pyglet.font.Text(font,
                                        text,
-                                       float(position[0]),
-                                       float(position[1]),
+                                       0.0,
+                                       0.0,
                                        color,
                                        width=width)
         if len(color) != 4:
@@ -150,7 +150,7 @@ class Label(Drawable):
     def getalpha(self):
         return self.txtobj.color[3]
 
-    def render(self, display):
+    def do_render(self, display):
         # self.txtobj.x = float(self.position[0])
         # self.txtobj.y = float(self.position[1])
         # self.txtobj.z = 0.0
@@ -199,5 +199,5 @@ class ClockDisplay(Drawable):
         Drawable.__init__(self, window)
         self.fps = pyglet.clock.ClockDisplay(*args, **kwargs)
 
-    def render(self, *args, **kwargs):
+    def do_render(self, *args, **kwargs):
         self.fps.draw()

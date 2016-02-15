@@ -1,5 +1,20 @@
 # ChangeLog
 
+## [0.0a11] - 2016-01-24 - chaomodus
+
+Make batches really a lot faster if moving. Enhance keyboard manager.
+
+### Added
+- Keyboard manager now has functions in the module to load an INI style config
+  file to setup keyboard settings. Useful for use-editable keyboard maps.
+
+### Changes
+- Use translation on batches instead of changing vertexes every time the batch is moved;
+  this should make drawing batches exceptionally faster.
+- As part of above, rejigger Drawable API. Now render(self,window) on the drawable is
+  expected to do any viewport manipulation. do_render takes the place of the previous
+  render command (positions viewport by default).
+
 ## [0.0a10] - 2015-10-01 - chaomodus
 
 Batch drawables. Better keyboard management. LayeredDict.

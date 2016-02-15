@@ -1,7 +1,5 @@
 import pyglet.graphics
 import pyglet.gl as GL
-import ctypes
-import itertools
 import math
 from .batchdraw import BatchDraw
 tau = math.pi * 2
@@ -55,6 +53,7 @@ def draw_polyline(vertices, color=(1.0,1.0,1.0), width=1.0, z=0.0, corner_style=
             draw_thickline(lastvert, vert, width, color, z)
         lastvert = vert
 
+
 def make_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0, batch=None):
     colspec = get_color_specifier(color, 2)
     if batch is None:
@@ -69,6 +68,7 @@ def make_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0, batch=None):
                 colspec)
     return mybatch
 
+
 def draw_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
@@ -78,7 +78,6 @@ def draw_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0):
                          GL.GL_LINES,
                          ('v3f', startpoint+(z, )+endpoint+(z ,)),
                          colspec)
-
 
 
 def make_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0, batch=None):
@@ -124,6 +123,7 @@ def make_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0, ba
 
     return mybatch
 
+
 def draw_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
     if width == 1:
         return draw_line(startpoint, endpoint, color, z)
@@ -161,6 +161,7 @@ def draw_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
                          GL.GL_QUADS,
                          ('v3f', coord1+coord2+coord3+coord4),
                          colspec)
+
 
 def make_crosshair(x,
                    y,
@@ -305,6 +306,7 @@ def make_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36, ba
               ('v3f', coords),
               colspec)
     return mybatch
+
 
 def draw_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36):
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
@@ -526,6 +528,7 @@ def draw_arrow(startpoint,
 def make_filled_box(color, position, size, z=0.0, batch=None):
     return make_gradbox(color, color, position=position, size=size, z=z, batch=batch)
 
+
 def draw_filled_box(color, position, size, z=0.0):
     return draw_gradbox(color, color, position=position, size=size, z=z)
 
@@ -683,6 +686,7 @@ def make_box(color=(0.0, 0.0, 0.0),
                            z)),
                   colspec)
     return mybatch
+
 
 def draw_box(color=(0.0, 0.0, 0.0),
              position=(0, 0),

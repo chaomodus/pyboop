@@ -12,7 +12,8 @@ import pyglet.graphics
 import boop
 import boop.component
 import boop.scene
-from boop.drawables import Drawable
+from boop.drawable import Drawable
+from boop.batchdraw import BatchDraw
 import boop.drawtools
 import math
 import random
@@ -23,18 +24,18 @@ class MyScene(boop.scene.Scene):
         self.components.append(boop.drawables.Clear(window))
 
 
-class MouseXhair(Drawable):
+class MouseXhair(BatchDraw):
     def __init__(self, window):
-        Drawable.__init__(self, window)
+        BatchDraw.__init__(self, window)
         window.set_mouse_visible(False)
         self.mousex = 0
         self.mousey = 0
+        boop.drawtools.make_crosshair(0,0,(1.0, 0.0, 1.0), batch=self)
 
-    def render(self, window):
-        # mouse is more responsive if we aren't event driven?? We don't have to wait for the events to by dispatched etc.
-        # this points to a flaw in the way we propogate events, we should probably optimize at runtime by scanning the object tree
-        # and only subscribing active end points to the event handhler
-        boop.drawtools.draw_crosshair(window._mouse_x, window._mouse_y)
+    def on_draw(self, state):
+        window = state.window
+        self.setpos(window._mouse_x, window._mouse_y)
+        BatchDraw.on_draw(self, state)
 
 class TestLine(Drawable):
     def __init__(self, window):

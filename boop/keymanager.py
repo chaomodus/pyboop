@@ -1,8 +1,77 @@
 from .component import component
 import pyglet.window
+import ConfigParser
+import io
+
+"""
+Manage keyboard input.
+"""
+
+def _lookup_binding_value(name):
+    """Translate an @'d name into the pyglet value for that name."""
+    if '@' in name:
+        if name[1:].upper() in pyglet.window.key.__dict__:
+            return pyglet.window.key.__dict__[name[1:].upper()]
+    print name
+    return name
+
+def abstract_load_config(keymanager, reset=False, binddict={}, impulselist=[], watchlist=[]):
+    if reset:
+        keymanager.reset()
+
+    for binding in binddict:
+        keymanager.alias(_lookup_binding_value(binding),
+                         _lookup_binding_value(binddict[binding]))
+        keymanager.track(_lookup_binding_value(binddict[binding]))
+
+    for impulse in impulselist:
+        keymanager.impulse(_lookup_binding_value(impulse))
+
+    for watch in watchlist:
+        keymanager.track(_lookup_binding_value(watch))
+    return keymanager
+
+
+def load_config(keymanager, reset=False, configfile='', defaultconfig=''):
+    """
+    Load an INI style config file.
+
+
+    Recognizes two sections, Options and Bindings. Options can contain
+    the keys impulses and watch, which use a CR delimited list of key
+    names to indicate keys which are tracked and produce impulses.
+    In the Bindings section, each key is interpreted as a key name which
+    is aliased to its value.
+
+    Keynames are either strings, or strings starting with an @ symbol
+    indicating as predefined key name in Boop such as @F9.
+    """
+    cf = ConfigParser.SafeConfigParser()
+    if defaultconfig:
+        cf.readfp(io.BytesIO(defaultconfig))
+    cf.read(configfile)
+
+    impulselist = []
+    watchlist = []
+    bindings = {}
+    if cf.has_section('Options'):
+        if cf.has_option('Options','impulses'):
+            impulselist = cf.get('Options','impulses').split('\n')
+        if cf.has_option('Options', 'watch'):
+            watchlist = cf.get('Options', 'watch').split('\n')
+    if cf.has_section('Bindings'):
+        for binding in cf.items('Bindings'):
+            bindings[binding[0]] = binding[1]
+    return abstract_load_config(keymanager,
+                                reset=reset,
+                                binddict=bindings,
+                                impulselist=impulselist,
+                                watchlist=watchlist)
+
 
 class KeyManager(component.Component):
-    """This is a component which records up/down state of keyboard and and mouse buttons and prouduces impulses.
+    """
+    This is a component which records up/down state of keyboard and and mouse buttons and prouduces impulses.
 
     Add this to your  Window or Scene to manage keys, aliasing keys, track keys, and create secondary handlers
     for keys.
@@ -17,7 +86,7 @@ class KeyManager(component.Component):
     Note that aliases can be aribtrary values, so they can be used to assign non-overlapping values for
     keys, for, for example, creating key mappings to arbitrary end points.
 
-    The key manager also acts as a dictionry. Accessing the value will return the current key state (or
+    The key manager also acts as a dictionary. Accessing the value will return the current key state (or
     up if it is an untracked key).
 
     Impulses are basically second-order keyboard events that only emit on key down.

@@ -1,5 +1,7 @@
 DEBUG_DRAWABLES = False
 
+import pyglet.gl as GL
+
 from .component import Component
 
 # abc
@@ -40,12 +42,22 @@ class Drawable(Component):
     def getalpha(self):
         return 1.0
 
-    def render(self, window):
-        pass
-
     def point_hit_test(self, px, py):
         r = self.getrect()
         return px > r[0] and px < r[2] and py > r[1] and py < r[3]
 
     def on_draw(self, state):
         self.render(state.window)
+
+    def render(self, window):
+        GL.glMatrixMode(GL.GL_MODELVIEW)
+        GL.glPushMatrix()
+        GL.glLoadIdentity()
+        pos = self.getpos()
+        GL.glTranslatef(float(pos[0]), float(pos[1]), 0.0)
+        self.do_render(window)
+        GL.glPopMatrix()
+
+    def do_render(self, window):
+        """Override this. Draw the thing around 0,0"""
+        pass

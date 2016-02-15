@@ -33,11 +33,6 @@
   event infrastructure [eg no user code would change, just everything gets
   faster].
 
-* Implement the numerous TODOs in drawtools and drawables. Basic support for
-  vertex lists is in place, but we should create a magic Batch object which
-  contains a vertex list, allowing them to be accessed ex-post-facto (and
-  modified).
-
 * Fix drawtools so that the actual parts that calculate crap are separate
   from the parts that create the batch objects or perform the draw routines
   (so that the calculation can be shared between make* and draw*).
