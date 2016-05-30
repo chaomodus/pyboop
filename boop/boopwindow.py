@@ -5,6 +5,7 @@ from . import layereddict
 
 
 class BoopWindow(component.ComponentHost, pyglet.window.Window):
+    """This in a subclass of pyglet's Window class that provides some convience for the fan-out event handling, and also makes it follow the Component protocol."""
     def __init__(self, *args, **kwargs):
         self._registry = layereddict.LayeredDict()
         self._registry.push({}, 'root')
@@ -24,24 +25,30 @@ class BoopWindow(component.ComponentHost, pyglet.window.Window):
         pyglet.window.Window.__init__(self, *args, **kwargs)
 
     def emit_tick(self, tm):
+        """Tick is a periodic time event."""
         self.dispatch_event('on_tick', tm)
 
     def push_bind_exclusive(self, event_type, handler):
+        """Take over exclusive handling of a specific event_type (pushes event handler to top of stack)."""
         self._exclusive_handlers.setdefault(event_type, [])
         self._exclusive_handlers[event_type].append(handler)
 
     def pop_bind_exclusive(self, event_type, handler):
+        "Pops the top of the exclusive event handler stack and restores normal handling if the stack is empty."""
         if event_type in self._exclusive_handlers:
             if handler in self._exclusive_handlers[event_type]:
                 self._exclusive_handlers[event_type].remove(handler)
 
     def handle_pre_event(self, event_type, *args, **kwargs):
+        """This is called immediately before the Window handles an event. It may veto the event from calling any handlers."""
         pass
 
     def handle_post_event(self, event_type, result, *args, **kwargs):
+        """This is called immeditaley after the Window handles an event."""
         return result
 
     def dispatch_event(self, event_type, *args, **kwargs):
+        """Override all of pyglet's event handling for our span out model."""
         result = None
         # let the pre event veto this event
         if self.handle_pre_event(event_type, *args, **kwargs):

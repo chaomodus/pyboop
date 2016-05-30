@@ -9,6 +9,7 @@ boop_events = ['on_tick',
 
 
 class EventStateHolder(object):
+    """This object is meant to hold event state. It is passed to ever event handler when the event triggers."""
     # Any client may indicate that they've handled the event by setting to True
     handled = False
     # Set by the window when the event is issued

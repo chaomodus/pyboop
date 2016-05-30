@@ -1,5 +1,21 @@
 # ChangeLog
 
+## [0.0a12] - 2016-05-30 - chaomodus
+
+Improvements to drawables.Image
+
+### Changes
+- Major documentation pass. Most classes, modules and methods should be
+  at least basically documented now.
+- Added scale support to Image. Removed extraneous methods.
+- Moved repositioning code to render_at in Drawable to ease drawing the
+  same object at several locations. render now calls render_at with
+  the drawable's position.
+- Drawable does a little more in the base class as far as size and position.
+- Image now falls back on Drawable for much of its functions. Now supports
+  setscale which sets the scale on the sprite.
+- LayeredDict has had numerous minor changes and rationalizations.
+
 ## [0.0a11] - 2016-01-24 - chaomodus
 
 Make batches really a lot faster if moving. Enhance keyboard manager.

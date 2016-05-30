@@ -7,21 +7,26 @@ from . import drawtools
 
 
 class DragMixin(object):
+    """This is an abstract base for drag and drop support. For a useful class based on this see boop.drawables.DraggableDrawableMixin."""
     _drag_dragging = False
 
     def can_drag(self, state, x, y):
+        """This must be overriden to allow dragging to happen."""
         return False
 
     def start_drag(self, state, x, y):
+        """Called before start of drag. Can veto drag by returning False."""
         return True
 
     def end_drag(self, state, x, y):
+        """Calld at end of drag."""
         return True
 
     def dragging(self, state, x, y):
         return True
 
     def is_dragging(self):
+        """Returns True if the object is being drug."""
         return self._drag_dragging
 
     def _drag_start(self, state, x, y):

@@ -23,20 +23,24 @@ POLY_CORNER_CHAMFER = 0
 
 
 def line_angle(startpoint, endpoint):
+    """Calculate the angle of a line segment."""
     deltax = endpoint[0] - startpoint[0]
     deltay = endpoint[1] - startpoint[1]
     return math.atan2(deltay, deltax)
 
 
 def up_tangent(angle):
+    """90 degrees to an angle. Used to calculate the 'up' normal for a line segment."""
     return (angle + qtau) % tau
 
 
 def down_tangent(angle):
+    """270 degrees to an angle. Used to calculate the 'down' normal for a line segment."""
     return (angle + qtau + math.pi) % tau
 
 
 def get_color_specifier(basecolor, number):
+    """Build an OpenGL color array for the number of specified vertices."""
     color = [float(x) for x in basecolor]
     if len(color) == 3:
         return ('c3d', color * number)
@@ -47,6 +51,7 @@ def get_color_specifier(basecolor, number):
 # this will someday draw nice polylines with corners and whatnot.
 # we will also make an effort to guarantee lack of overdraw.
 def draw_polyline(vertices, color=(1.0,1.0,1.0), width=1.0, z=0.0, corner_style=POLY_CORNER_CHAMFER):
+    """Draw a polyline of specified thickness between a list of vertices. Someday will support no-overdraw chamfers."""
     lastvert = None
     for vert in vertices:
         if lastvert:
@@ -55,6 +60,7 @@ def draw_polyline(vertices, color=(1.0,1.0,1.0), width=1.0, z=0.0, corner_style=
 
 
 def make_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0, batch=None):
+    """Make a batch draw for a specific line."""
     colspec = get_color_specifier(color, 2)
     if batch is None:
         mybatch = BatchDraw()
@@ -70,6 +76,7 @@ def make_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0, batch=None):
 
 
 def draw_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0):
+    """Draw a line segment."""
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
 
@@ -81,6 +88,7 @@ def draw_line(startpoint, endpoint, color=(1.0, 1.0, 1.0), z=0.0):
 
 
 def make_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0, batch=None):
+    """Make a polygon-based line segment batch with a specified thickness."""
     if width == 1:
         return make_line(startpoint, endpoint, color, z, batch)
 
@@ -125,6 +133,7 @@ def make_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0, ba
 
 
 def draw_thickline(startpoint, endpoint, width, color=(1.0, 1.0, 1.0), z=0.0):
+    """Draw a line segment with a specified thickness."""
     if width == 1:
         return draw_line(startpoint, endpoint, color, z)
 
@@ -171,6 +180,7 @@ def make_crosshair(x,
                    z=0.0,
                    angle=0.0,
                    batch=None):
+    """Make a crosshair object batch. Crosshairs are four line segments at a specified angle, 90 degrees from each other, centered at a specific point, and a specified distance from that point."""
     if batch is None:
         mybatch = BatchDraw()
     else:
@@ -232,6 +242,7 @@ def draw_crosshair(x,
                    gap=5.0,
                    z=0.0,
                    angle=0.0):
+    """Draw a crosshair object. Crosshairs are four line segments at a specified angle, 90 degrees from each other, centered at a specific point, and a specified distance from that point."""
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
@@ -282,6 +293,7 @@ def draw_crosshair(x,
 
 
 def make_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36, batch=None):
+    """Make an unfilled circle batch."""
     if batch is None:
         mybatch = BatchDraw()
     else:
@@ -309,6 +321,7 @@ def make_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36, ba
 
 
 def draw_circle(x, y, color=(1.0, 1.0, 1.0), radius=10.0, z=0.0, segments=36):
+    """Draw an unfilled circle."""
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
@@ -336,6 +349,7 @@ def make_filled_circle(x,
                        z=0.0,
                        segments=36,
                        batch=None):
+    """Make a filled circle batch."""
 
     if batch is None:
         mybatch = BatchDraw()
@@ -366,6 +380,7 @@ def draw_filled_circle(x,
                        radius=10.0,
                        z=0.0,
                        segments=36):
+    """Draw a filled circle."""
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
@@ -391,6 +406,7 @@ def make_circle_annulus(x,
                         z=0.0,
                         segments=36,
                         batch=None):
+    """Make a circle annulus batch. A circle annulus is a filled circle containing an unfilled circle."""
     if batch is None:
         mybatch = BatchDraw()
     else:
@@ -423,6 +439,7 @@ def draw_circle_annulus(x,
                         radius_outer=10.0,
                         z=0.0,
                         segments=36):
+    """Draw a circle annulus. A circle annulus is a filled circle containing an unfilled circle."""
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     x = float(x)
@@ -450,6 +467,7 @@ def make_arrow(startpoint,
                z=0.0,
                style=ARROW_STYLE_PLAIN,
                batch=None):
+    """Make a simple arrowhead batch."""
     if batch is None:
         mybatch = BatchDraw()
     else:
@@ -493,6 +511,7 @@ def draw_arrow(startpoint,
                arrowwidth=15,
                z=0.0,
                style=ARROW_STYLE_PLAIN):
+    """Draw a simple arrowhead."""
     GL.glEnable(GL.GL_LINE_SMOOTH | GL.GL_BLEND)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
     startpoint = [float(x) for x in startpoint]
@@ -526,10 +545,12 @@ def draw_arrow(startpoint,
 
 
 def make_filled_box(color, position, size, z=0.0, batch=None):
+    """Make a filled box batch."""
     return make_gradbox(color, color, position=position, size=size, z=z, batch=batch)
 
 
 def draw_filled_box(color, position, size, z=0.0):
+    """Draw a filled box."""
     return draw_gradbox(color, color, position=position, size=size, z=z)
 
 
@@ -540,6 +561,7 @@ def make_gradbox(startcolor=(0.0, 0.0, 0.0),
                  size=(0, 0),
                  z=0.0,
                  batch=None):
+    """Make a gradiented box batch with a linear two color gradient."""
     if batch is None:
         mybatch = BatchDraw()
     else:
@@ -602,6 +624,7 @@ def draw_gradbox(startcolor=(0.0, 0.0, 0.0),
                  position=(0, 0),
                  size=(0, 0),
                  z=0.0):
+    """Draw a gradiented box with a linear two color gradient."""
     z = float(z)
     startcoords = [float(x) for x in position]
     endcoords = [float(x + y) for x, y in zip(position, size)]
@@ -655,6 +678,7 @@ def make_box(color=(0.0, 0.0, 0.0),
              z=0.0,
              width=1,
              batch=None):
+    """Make a box outline batch."""
     if batch is None:
         mybatch = BatchDraw()
     else:
@@ -670,21 +694,21 @@ def make_box(color=(0.0, 0.0, 0.0),
     else:
         colspec = get_color_specifier(color, 4)
         mybatch.add(4,
-                  GL.GL_LINE_LOOP,
-                  None
-                  ('v3f', (startcoords[0],
-                           startcoords[1],
-                           z,
-                           startcoords[0],
-                           endcoords[1],
-                           z,
-                           endcoords[0],
-                           endcoords[1],
-                           z,
-                           endcoords[0],
-                           startcoords[1],
-                           z)),
-                  colspec)
+                    GL.GL_LINE_LOOP,
+                    None,
+                    ('v3f', (startcoords[0],
+                             startcoords[1],
+                             z,
+                             startcoords[0],
+                             endcoords[1],
+                             z,
+                             endcoords[0],
+                             endcoords[1],
+                             z,
+                             endcoords[0],
+                             startcoords[1],
+                            z)),
+                    colspec)
     return mybatch
 
 
@@ -693,6 +717,7 @@ def draw_box(color=(0.0, 0.0, 0.0),
              size=(0, 0),
              z=0.0,
              width=1):
+    """Draw a box outline."""
     z = float(z)
     startcoords = [float(x) for x in position]
     endcoords = [float(x + y) for x, y in zip(position, size)]

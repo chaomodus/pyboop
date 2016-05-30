@@ -16,6 +16,7 @@ def _lookup_binding_value(name):
     return name
 
 def abstract_load_config(keymanager, reset=False, binddict={}, impulselist=[], watchlist=[]):
+    """Implement your own key configuration loader by calling this with a series of lists and dictionaries."""
     if reset:
         keymanager.reset()
 
@@ -102,6 +103,7 @@ class KeyManager(component.Component):
         self.reemit = reemit
 
     def reset(self, key=None):
+        """Set all key states to "up"."""
         if key is None:
             for key in self.key_states:
                 self.key_states[key] = False
@@ -109,6 +111,7 @@ class KeyManager(component.Component):
             self.key_states[key] = False
 
     def state(self, key):
+        """Get the state of a particlar key."""
         if key in self.key_states:
             return self.key_states[key]
         return None
@@ -118,24 +121,30 @@ class KeyManager(component.Component):
         self.key_aliases[key] = value
 
     def delalias(self, key):
+        """Remove a key alias."""
         if key in self.key_aliases:
             del self.key_aliases[key]
 
     def track(self, key):
+        """Tell the keyboard manager to start tracking the states of a particular key."""
         self.key_trackstates.add(key)
 
     def deltrack(self, key):
+        """Tell the keyboard manager to stop tracking the states of a particular key."""
         self.key_trackstates.remove(key)
         if key in self.key_states:
             del self.key_states[key]
 
     def impulse(self, key):
+        """Ask for impulses to be emitted for a specific key."""
         self.key_impulses.add(key)
 
     def delimpulse(self, key):
+        """Stop emitting impulses for a specific key."""
         self.key_impulses.remove(key)
 
     def on_key_press(self, state, startkey, modifiers):
+        """Internal keypress handler."""
         if startkey in self.key_aliases:
             key = self.key_aliases[startkey]
         else:
@@ -151,6 +160,7 @@ class KeyManager(component.Component):
             state.window.dispatch_event('on_key_press', key, modifiers)
 
     def on_key_release(self, state, startkey, modifiers):
+        """Internal keyrelease handler."""
         if startkey in self.key_aliases:
             key = self.key_aliases[startkey]
         else:
