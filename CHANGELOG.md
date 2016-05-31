@@ -2,7 +2,7 @@
 
 ## [0.0a12] - 2016-05-30 - chaomodus
 
-Improvements to drawables.Image
+Improvements to drawables.Image. Drawable improvements. Other fixes and improvements.
 
 ### Changes
 - Major documentation pass. Most classes, modules and methods should be
