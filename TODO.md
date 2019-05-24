@@ -1,3 +1,7 @@
+* Mypy everything
+* Tox flake8, black, mypy
+* Sphinx docs
+
 * TextArea object.
 
 * Scrollable area object.
