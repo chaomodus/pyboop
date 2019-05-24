@@ -3,7 +3,6 @@ import pyglet.font
 import pyglet.graphics
 import pyglet.gl as GL
 from .component import Component
-from . import drawtools
 
 
 class DragMixin(object):

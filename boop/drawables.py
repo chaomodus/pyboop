@@ -1,10 +1,13 @@
 import pyglet
 import pyglet.font
+import pyglet.text
 import pyglet.graphics
 import pyglet.gl as GL
 from .drag import DragMixin
 from . import drawtools
 from .drawable import Drawable, DEBUG_DRAWABLES
+import math
+
 
 # TODO automatically wrap drawtools routines (and eventually) static
 # drawtools things
@@ -16,7 +19,7 @@ class DrawWrapper(Drawable):
     ### FIXME we should provide a way to implement dimensions and other things here.
 
     def __init__(self, display, drawtool, *args, **kwargs):
-        Drawable.__init__(sef, display)
+        Drawable.__init__(self, display)
         self.drawtool = drawtool
         self.dt_args = args
         self.dt_kwargs = kwargs
@@ -108,8 +111,55 @@ class Backdrop(Image):
         self.spr.draw()
         # Image.render(self,display)
 
-
 class Label(Drawable):
+    """Wraps Pyglet's Label in the Drawable protocol."""
+    def __init__(self,
+                 display,
+                 text,
+                 font_name='Helvetica',
+                 font_size=12,
+                 position=(0, 0),
+                 color=(1.0, 1.0, 1.0, 1.0),
+                 anchor_x='left',
+                 anchor_y='bottom',
+                 align='left',
+                 bold=False,
+                 width=None,
+                 multiline=False):
+
+        Drawable.__init__(self, display)
+        self.text = text
+        self.position = position
+        if len(color) != 4:
+            pygcolor = list(map(lambda x: int(round(x*255)), (color[0], color[1], color[2], 1.0)))
+        else:
+            pygcolor = list(map(lambda x: int(round(x*255)), color))
+
+        self.label = pyglet.text.Label(text=text,
+                                       font_name=font_name,
+                                       font_size=font_size,
+                                       x=0.0,
+                                       y=0.0,
+                                       anchor_x = anchor_x,
+                                       anchor_y = anchor_y,
+                                       align = align,
+                                       bold = bold,
+                                       multiline = multiline,
+                                       color=pygcolor,
+                                       width=width)
+    def setalpha(self, alpha):
+        c = list(self.label.color)
+        c[3] = int(round(alpha * 255))
+        self.label.color = c
+
+    def getalpha(self):
+        return self.label.color[3] / 255.0
+
+    def do_render(self, display):
+        if self.getalpha() != 0:
+            self.label.draw()
+
+class LabelOld(Drawable):
     """Wraps pyglet's text object class in Drawable protocol."""
     def __init__(self,
                  display,
@@ -153,6 +203,7 @@ class FadeMixin(object):
 
     def __init__(self, *args, **kwargs):
         self.fade_state = self.FADE_ST_ON
+        self.fade_rate = 0.05
 
     def fade_toggle(self):
         if self.fade_state in (self.FADE_ST_ON, self.FADE_ST_FI):
@@ -160,17 +211,24 @@ class FadeMixin(object):
         else:
             self.fade_state = self.FADE_ST_FI
 
+    def fade_in(self):
+        self.fade_state = self.FADE_ST_FI
+
+    def fade_out(self):
+        self.fade_state = self.FADE_ST_FO
+
+
     def fade_update(self):
         if self.fade_state != self.FADE_ST_OFF:
             if self.fade_state in (self.FADE_ST_FO, self.FADE_ST_FI):
                 alpha = self.getalpha()
                 if self.fade_state == self.FADE_ST_FO:
-                    alpha -= 0.05
+                    alpha -= self.fade_rate
                     if alpha <= 0.0:
                         alpha = 0.0
                         self.fade_state = self.FADE_ST_OFF
                 else:
-                    alpha += 0.05
+                    alpha += self.fade_rate
                     if alpha >= 1.0:
                         alpha = 1.0
                         self.fade_state = self.FADE_ST_ON

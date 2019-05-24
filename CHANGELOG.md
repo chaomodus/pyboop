@@ -1,5 +1,21 @@
 # ChangeLog
 
+## [0.0a16 WIP] - chaomodus
+
+Only Python3 supported now, changes to make that the case.
+
+
+## [0.0a14] - chamodus
+
+Cleanups and minor fixes.
+
+
+## Fixes
+- Fixed typo in drawables.DrawWrapper.
+- Indirect window fixes
+- Cleaned up BoopWindow imports and style.
+- Enhanced fade mixin to allow for variable speed.
+
 ## [0.0a12] - 2016-05-30 - chaomodus
 
 Improvements to drawables.Image. Drawable improvements. Other fixes and improvements.

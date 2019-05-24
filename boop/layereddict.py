@@ -33,7 +33,7 @@ class LayeredDict(object):
                 self.dictstack[dk][key] = value
                 found = True
         if not found:
-            self.dictstack[self.dictstack.keys()[-1]][key] = value
+            self.dictstack[tuple(self.dictstack.keys())[-1]][key] = value
 
     def getcont(self, label):
         """Get the sub-dictionary in the stack of the specific label. (DEPRECATED)"""

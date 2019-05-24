@@ -1,6 +1,6 @@
 from .component import component
 import pyglet.window
-import ConfigParser
+import configparser
 import io
 
 """
@@ -12,7 +12,6 @@ def _lookup_binding_value(name):
     if '@' in name:
         if name[1:].upper() in pyglet.window.key.__dict__:
             return pyglet.window.key.__dict__[name[1:].upper()]
-    print name
     return name
 
 def abstract_load_config(keymanager, reset=False, binddict={}, impulselist=[], watchlist=[]):
@@ -47,7 +46,7 @@ def load_config(keymanager, reset=False, configfile='', defaultconfig=''):
     Keynames are either strings, or strings starting with an @ symbol
     indicating as predefined key name in Boop such as @F9.
     """
-    cf = ConfigParser.SafeConfigParser()
+    cf = configparser.SafeConfigParser()
     if defaultconfig:
         cf.readfp(io.BytesIO(defaultconfig))
     cf.read(configfile)

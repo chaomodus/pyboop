@@ -6,9 +6,6 @@
 import sys
 sys.path.append('../')
 import pyglet
-import pyglet.font
-import pyglet.gl as GL
-import pyglet.graphics
 import boop
 import boop.component
 import boop.scene
@@ -52,7 +49,7 @@ config = pyglet.gl.Config(sample_buffers=1,
                           double_buffer=1,
                           depth_size=8)
 
-fnt = pyglet.font.load('Kochi Gothic', 18)
+# fnt = pyglet.font.load('Kochi Gothic', 18)
 mywindow = boop.BoopWindow(800,600,scene_manager=boop.scene.SceneManager(), config=config)
 scene = MyScene(mywindow)
 mywindow.scene_manager.add(scene, 'test')
@@ -71,7 +68,7 @@ scene.add(ch)
 
 scene.add(boop.drawables.DrawWrapper(mywindow, boop.drawtools.draw_polyline, ((random.randint(0, mywindow.width), random.randint(0, mywindow.height)), (random.randint(0, mywindow.width), random.randint(0, mywindow.height)), (random.randint(0, mywindow.width), random.randint(0, mywindow.height))), (1.0, 0.0, 0.0), 10))
 
-label = boop.drawables.Label(mywindow, fnt, u"Kawaii ^.^ かわいい", (220,220))
+label = boop.drawables.Label(mywindow, u"Kawaii ^.^ かわいい", font_name='Kochi Gothic', font_size=18, position=(220,220))
 scene.add(label)
 
 scene.add(TestLine(mywindow))

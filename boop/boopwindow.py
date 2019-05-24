@@ -1,28 +1,29 @@
 import pyglet
-from . import component
-from . import events
-from . import layereddict
+from pyglet.window import Window
+from .component import ComponentHost
+from .events import EventStateHolder, boop_events
+from .layereddict import LayeredDict
 
 
-class BoopWindow(component.ComponentHost, pyglet.window.Window):
+class BoopWindow(ComponentHost, Window):
     """This in a subclass of pyglet's Window class that provides some convience for the fan-out event handling, and also makes it follow the Component protocol."""
     def __init__(self, *args, **kwargs):
-        self._registry = layereddict.LayeredDict()
+        self._registry = LayeredDict()
         self._registry.push({}, 'root')
 
-        component.ComponentHost.__init__(self)
+        ComponentHost.__init__(self)
         try:
             self.scene_manager = kwargs['scene_manager']
             del kwargs['scene_manager']
         except KeyError:
             self.scene_manager = None
-        self._eventstate = events.EventStateHolder()
+        self._eventstate = EventStateHolder()
         self._eventstate.window = self
         self._eventstate.registry = self._registry
         # dragging objects set True and other objects may ignore
         self.dragging_veto = False
         self._exclusive_handlers = dict()
-        pyglet.window.Window.__init__(self, *args, **kwargs)
+        Window.__init__(self, *args, **kwargs)
 
     def emit_tick(self, tm):
         """Tick is a periodic time event."""
@@ -65,13 +66,13 @@ class BoopWindow(component.ComponentHost, pyglet.window.Window):
         else:
             result = self.scene_manager.dispatch_event(event_type, self._eventstate, *args, **kwargs)
             # low level event handlers
-            component.ComponentHost.handle_event(self, event_type, self._eventstate, *args, **kwargs)
+            ComponentHost.handle_event(self, event_type, self._eventstate, *args, **kwargs)
         if not result:
-            result = pyglet.window.Window.dispatch_event(self,
-                                                         event_type,
-                                                         *args)
+            result = Window.dispatch_event(self,
+                                           event_type,
+                                           *args)
         return self.handle_post_event(event_type, result, *args, **kwargs)
 
 
-for event in events.boop_events:
+for event in boop_events:
     BoopWindow.register_event_type(event)
