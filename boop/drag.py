@@ -1,12 +1,12 @@
 import pyglet
 import pyglet.font
 import pyglet.graphics
-import pyglet.gl as GL
-from .component import Component
 
 
 class DragMixin(object):
-    """This is an abstract base for drag and drop support. For a useful class based on this see boop.drawables.DraggableDrawableMixin."""
+    """This is an abstract base for drag and drop support. For a useful class based on this see
+    `boop.drawables.DraggableDrawableMixin`"""
+
     _drag_dragging = False
 
     def can_drag(self, state, x, y):
@@ -31,18 +31,21 @@ class DragMixin(object):
     def _drag_start(self, state, x, y):
         self._drag_dragging = True
         state.window.dragging_veto = self
-        state.window.push_bind_exclusive('on_mouse_drag', self.on_mouse_drag)
+        state.window.push_bind_exclusive("on_mouse_drag", self.on_mouse_drag)
 
     def _drag_stop(self, state, x, y):
         self._drag_dragging = False
         if state.window.dragging_veto is self:
             state.window.dragging_veto = False
-        state.window.pop_bind_exclusive('on_mouse_drag', self.on_mouse_drag)
+        state.window.pop_bind_exclusive("on_mouse_drag", self.on_mouse_drag)
 
     def on_mouse_drag(self, state, x, y, dx, dy, buttons, modifiers):
-        if (buttons & pyglet.window.mouse.LEFT) and \
-           not self.is_dragging() and self.can_drag(state, x, y) and \
-           not state.window.dragging_veto:
+        if (
+            (buttons & pyglet.window.mouse.LEFT)
+            and not self.is_dragging()
+            and self.can_drag(state, x, y)
+            and not state.window.dragging_veto
+        ):
             if self.start_drag(state, x, y):
                 self._drag_start(state, x, y)
         elif self.is_dragging():

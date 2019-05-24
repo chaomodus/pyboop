@@ -1,5 +1,6 @@
 from .componenthost import ComponentHost
 
+
 class Component(ComponentHost):
     def __init__(self):
         ComponentHost.__init__(self)
@@ -10,7 +11,7 @@ class Component(ComponentHost):
         self.state_stack.append(state)
         evthandler = None
         try:
-            evthandler = self.__getattribute__('do_'+event_type)
+            evthandler = self.__getattribute__("do_" + event_type)
         except AttributeError:
             try:
                 evthandler = self.__getattribute__(event_type)

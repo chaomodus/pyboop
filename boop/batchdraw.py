@@ -1,10 +1,11 @@
 from .drawable import Drawable
 from pyglet.graphics import Batch
-from .utils import chunker
 
 
 class BatchDraw(Drawable, Batch):
-    """This class encapsulates both a Batch from pyglet and a Drawable from PyBoop, adapting the Batch to the Drawable protocol."""
+    """This class encapsulates both a Batch from pyglet and a Drawable from PyBoop, adapting the Batch to the Drawable
+    protocol."""
+
     def __init__(self, window=None):
         Drawable.__init__(self, window)
         Batch.__init__(self)

@@ -16,7 +16,4 @@ class Scene(Component):
     def handle_event(self, event_type, state, *args, **kwargs):
         if state:
             state.scene = self
-        Component.handle_event(self,
-                               event_type,
-                               state,
-                               *args, **kwargs)
+        Component.handle_event(self, event_type, state, *args, **kwargs)

@@ -56,7 +56,8 @@ class LayeredDict(object):
         return self.dictstack.keys()
 
     def push(self, container, label=None):
-        """Push a new sub-dictionary onto the stack with a specified label (a uniquely numbered label will be assigend if none is specified)."""
+        """Push a new sub-dictionary onto the stack with a specified label (a uniquely numbered label will be assigend
+        if none is specified)."""
         if label is None:
             self.idx += 1
             label = self.idx
@@ -83,7 +84,7 @@ class LayeredDict(object):
         return None, None
 
     def __repr__(self):
-        out = '<LayeredDict '
+        out = "<LayeredDict "
         for i, k in reversed(list(enumerate(self.dictstack.keys()))):
-            out += '[{i}]{k}:{v} '.format(i=i, k=k, v=self.dictstack[k].__repr__())
-        return out + '>'
+            out += "[{i}]{k}:{v} ".format(i=i, k=k, v=self.dictstack[k].__repr__())
+        return out + ">"

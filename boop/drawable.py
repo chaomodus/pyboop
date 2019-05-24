@@ -1,12 +1,14 @@
-DEBUG_DRAWABLES = False
-
 import pyglet.gl as GL
 
 from .component import Component
 
+DEBUG_DRAWABLES = False
+
 
 class Drawable(Component):
-    """This is the base class for drawable things within PyBoop. It provides most of the background machinery and a basic protocol for drawable things."""
+    """This is the base class for drawable things within PyBoop. It provides most of the background machinery and a
+    basic protocol for drawable things."""
+
     def __init__(self, window):
         Component.__init__(self)
         self.position = (0, 0)
@@ -41,10 +43,7 @@ class Drawable(Component):
         """Returns the rectangle coordinates."""
         sz = self.getsize()
         pos = self.getpos()
-        return (pos[0],
-                pos[1],
-                pos[0] + sz[0],
-                pos[1] + sz[1])
+        return (pos[0], pos[1], pos[0] + sz[0], pos[1] + sz[1])
 
     def setalpha(self, alpha):
         """Sets the draw alpha of this object if applicable."""
@@ -60,7 +59,8 @@ class Drawable(Component):
         return px > r[0] and px < r[2] and py > r[1] and py < r[3]
 
     def on_draw(self, state):
-        """This is called each frame if this object is in the drawing context (within a Scene or other drawable component)"""
+        """This is called each frame if this object is in the drawing context (within a Scene or other drawable
+        component)"""
         self.render(state.window)
 
     def render(self, window):

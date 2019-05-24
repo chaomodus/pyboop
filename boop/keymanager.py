@@ -7,12 +7,14 @@ import io
 Manage keyboard input.
 """
 
+
 def _lookup_binding_value(name):
     """Translate an @'d name into the pyglet value for that name."""
-    if '@' in name:
+    if "@" in name:
         if name[1:].upper() in pyglet.window.key.__dict__:
             return pyglet.window.key.__dict__[name[1:].upper()]
     return name
+
 
 def abstract_load_config(keymanager, reset=False, binddict={}, impulselist=[], watchlist=[]):
     """Implement your own key configuration loader by calling this with a series of lists and dictionaries."""
@@ -20,8 +22,7 @@ def abstract_load_config(keymanager, reset=False, binddict={}, impulselist=[], w
         keymanager.reset()
 
     for binding in binddict:
-        keymanager.alias(_lookup_binding_value(binding),
-                         _lookup_binding_value(binddict[binding]))
+        keymanager.alias(_lookup_binding_value(binding), _lookup_binding_value(binddict[binding]))
         keymanager.track(_lookup_binding_value(binddict[binding]))
 
     for impulse in impulselist:
@@ -32,7 +33,7 @@ def abstract_load_config(keymanager, reset=False, binddict={}, impulselist=[], w
     return keymanager
 
 
-def load_config(keymanager, reset=False, configfile='', defaultconfig=''):
+def load_config(keymanager, reset=False, configfile="", defaultconfig=""):
     """
     Load an INI style config file.
 
@@ -54,19 +55,17 @@ def load_config(keymanager, reset=False, configfile='', defaultconfig=''):
     impulselist = []
     watchlist = []
     bindings = {}
-    if cf.has_section('Options'):
-        if cf.has_option('Options','impulses'):
-            impulselist = cf.get('Options','impulses').split('\n')
-        if cf.has_option('Options', 'watch'):
-            watchlist = cf.get('Options', 'watch').split('\n')
-    if cf.has_section('Bindings'):
-        for binding in cf.items('Bindings'):
+    if cf.has_section("Options"):
+        if cf.has_option("Options", "impulses"):
+            impulselist = cf.get("Options", "impulses").split("\n")
+        if cf.has_option("Options", "watch"):
+            watchlist = cf.get("Options", "watch").split("\n")
+    if cf.has_section("Bindings"):
+        for binding in cf.items("Bindings"):
             bindings[binding[0]] = binding[1]
-    return abstract_load_config(keymanager,
-                                reset=reset,
-                                binddict=bindings,
-                                impulselist=impulselist,
-                                watchlist=watchlist)
+    return abstract_load_config(
+        keymanager, reset=reset, binddict=bindings, impulselist=impulselist, watchlist=watchlist
+    )
 
 
 class KeyManager(component.Component):
@@ -150,13 +149,13 @@ class KeyManager(component.Component):
             key = startkey
 
         if key in self.key_impulses:
-            state.window.dispatch_event('on_impulse', key)
+            state.window.dispatch_event("on_impulse", key)
 
         if key in self.key_trackstates:
             self.key_states[key] = True
 
         if key != startkey and self.reemit:
-            state.window.dispatch_event('on_key_press', key, modifiers)
+            state.window.dispatch_event("on_key_press", key, modifiers)
 
     def on_key_release(self, state, startkey, modifiers):
         """Internal keyrelease handler."""
@@ -169,4 +168,4 @@ class KeyManager(component.Component):
             self.key_states[key] = False
 
         if key != startkey and self.reemit:
-            state.window.dispatch_event('on_key_release', key, modifiers)
+            state.window.dispatch_event("on_key_release", key, modifiers)

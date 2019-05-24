@@ -4,6 +4,11 @@
 
 Only Python3 supported now, changes to make that the case.
 
+## Changes
+- Make imports more convenient.
+- Add labels to the components, with the default being the order that they are added
+  to the ComponentHost.
+
 
 ## [0.0a14] - chamodus
 

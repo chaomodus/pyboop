@@ -1,4 +1,3 @@
-import pyglet
 from pyglet.window import Window
 from .component import ComponentHost
 from .events import EventStateHolder, boop_events
@@ -6,15 +5,17 @@ from .layereddict import LayeredDict
 
 
 class BoopWindow(ComponentHost, Window):
-    """This in a subclass of pyglet's Window class that provides some convience for the fan-out event handling, and also makes it follow the Component protocol."""
+    """This in a subclass of pyglet's Window class that provides some convience for the fan-out event handling, and also
+    makes it follow the Component protocol."""
+
     def __init__(self, *args, **kwargs):
         self._registry = LayeredDict()
-        self._registry.push({}, 'root')
+        self._registry.push({}, "root")
 
         ComponentHost.__init__(self)
         try:
-            self.scene_manager = kwargs['scene_manager']
-            del kwargs['scene_manager']
+            self.scene_manager = kwargs["scene_manager"]
+            del kwargs["scene_manager"]
         except KeyError:
             self.scene_manager = None
         self._eventstate = EventStateHolder()
@@ -27,7 +28,7 @@ class BoopWindow(ComponentHost, Window):
 
     def emit_tick(self, tm):
         """Tick is a periodic time event."""
-        self.dispatch_event('on_tick', tm)
+        self.dispatch_event("on_tick", tm)
 
     def push_bind_exclusive(self, event_type, handler):
         """Take over exclusive handling of a specific event_type (pushes event handler to top of stack)."""
@@ -35,13 +36,14 @@ class BoopWindow(ComponentHost, Window):
         self._exclusive_handlers[event_type].append(handler)
 
     def pop_bind_exclusive(self, event_type, handler):
-        "Pops the top of the exclusive event handler stack and restores normal handling if the stack is empty."""
+        "Pops the top of the exclusive event handler stack and restores normal handling if the stack is empty." ""
         if event_type in self._exclusive_handlers:
             if handler in self._exclusive_handlers[event_type]:
                 self._exclusive_handlers[event_type].remove(handler)
 
     def handle_pre_event(self, event_type, *args, **kwargs):
-        """This is called immediately before the Window handles an event. It may veto the event from calling any handlers."""
+        """This is called immediately before the Window handles an event. It may veto the event from calling any
+        handlers."""
         pass
 
     def handle_post_event(self, event_type, result, *args, **kwargs):
@@ -68,9 +70,7 @@ class BoopWindow(ComponentHost, Window):
             # low level event handlers
             ComponentHost.handle_event(self, event_type, self._eventstate, *args, **kwargs)
         if not result:
-            result = Window.dispatch_event(self,
-                                           event_type,
-                                           *args)
+            result = Window.dispatch_event(self, event_type, *args)
         return self.handle_post_event(event_type, result, *args, **kwargs)
 
 

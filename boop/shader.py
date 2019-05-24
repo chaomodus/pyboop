@@ -48,12 +48,9 @@ class Shader:
         # upload them this is deep, dark, dangerous black magick - don't try
         # stuff like this at home!
         src = (ctypes.c_char_p * count)(*strings)
-        GL.glShaderSource(shader,
-                          count,
-                          ctypes.cast(
-                              ctypes.pointer(src),
-                              ctypes.POINTER(ctypes.POINTER(ctypes.c_char))),
-                          None)
+        GL.glShaderSource(
+            shader, count, ctypes.cast(ctypes.pointer(src), ctypes.POINTER(ctypes.POINTER(ctypes.c_char))), None
+        )
 
         # compile the shader
         GL.glCompileShader(shader)
@@ -87,9 +84,7 @@ class Shader:
         # if linking failed, print the log
         if not temp:
             #   retrieve the log length
-            GL.glGetProgramiv(self.handle,
-                              GL.GL_INFO_LOG_LENGTH,
-                              ctypes.byref(temp))
+            GL.glGetProgramiv(self.handle, GL.GL_INFO_LOG_LENGTH, ctypes.byref(temp))
             # create a buffer for the log
             buffer = ctypes.create_string_buffer(temp.value)
             # retrieve the log text

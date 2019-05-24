@@ -21,9 +21,9 @@ class FBO(object):
     @staticmethod
     def supported():
         """Check that FBOs are supported"""
-        return (
-                gl.gl_info.have_extension("GL_EXT_framebuffer_object") and
-                gl.gl_info.have_extension("GL_ARB_draw_buffers"))
+        return gl.gl_info.have_extension("GL_EXT_framebuffer_object") and gl.gl_info.have_extension(
+            "GL_ARB_draw_buffers"
+        )
 
     def __init__(self, width, height):
         """Creates a FBO"""
@@ -39,76 +39,59 @@ class FBO(object):
         self.texture_id = ctypes.c_uint(0)
 
         # Frame buffer
-        gl.glGenFramebuffersEXT(
-                1,  # number of buffers created
-                ctypes.byref(self.framebuffer_id),  # dest. id
-            )
+        gl.glGenFramebuffersEXT(1, ctypes.byref(self.framebuffer_id))  # number of buffers created  # dest. id
 
         self.initialized = True
 
         with self._bound_context(gl.GL_FRAMEBUFFER_EXT):
             # Depth buffer
-            gl.glGenRenderbuffersEXT(
-                    1,  # no. of buffers created
-                    ctypes.byref(self.depthbuffer_id),  # dest. id
-                )
-            gl.glBindRenderbufferEXT(
-                    gl.GL_RENDERBUFFER_EXT,  # target
-                    self.depthbuffer_id,  # id
-                )
+            gl.glGenRenderbuffersEXT(1, ctypes.byref(self.depthbuffer_id))  # no. of buffers created  # dest. id
+            gl.glBindRenderbufferEXT(gl.GL_RENDERBUFFER_EXT, self.depthbuffer_id)  # target  # id
             gl.glRenderbufferStorageEXT(
-                    gl.GL_RENDERBUFFER_EXT,  # target
-                    gl.GL_DEPTH_COMPONENT,  # internal format
-                    self.width, self.height,  # size
-                )
+                gl.GL_RENDERBUFFER_EXT,  # target
+                gl.GL_DEPTH_COMPONENT,  # internal format
+                self.width,
+                self.height,  # size
+            )
             gl.glFramebufferRenderbufferEXT(
-                    gl.GL_FRAMEBUFFER_EXT,  # target
-                    gl.GL_DEPTH_ATTACHMENT_EXT,  # attachment point
-                    gl.GL_RENDERBUFFER_EXT,  # renderbuffer target
-                    self.depthbuffer_id,  # renderbuffer id
-                )
+                gl.GL_FRAMEBUFFER_EXT,  # target
+                gl.GL_DEPTH_ATTACHMENT_EXT,  # attachment point
+                gl.GL_RENDERBUFFER_EXT,  # renderbuffer target
+                self.depthbuffer_id,  # renderbuffer id
+            )
 
             # Target Texture
-            gl.glGenTextures(
-                    1,  # no. of textures
-                    ctypes.byref(self.texture_id),  # dest. id
-                )
-            gl.glBindTexture(
-                    gl.GL_TEXTURE_2D,  # target
-                    self.texture_id,  # texture id
-                )
+            gl.glGenTextures(1, ctypes.byref(self.texture_id))  # no. of textures  # dest. id
+            gl.glBindTexture(gl.GL_TEXTURE_2D, self.texture_id)  # target  # texture id
 
             # Black magic (props to pyprocessing!)
             # (nearest works, as well as linear)
             gl.glTexParameteri(
-                    gl.GL_TEXTURE_2D,  # target
-                    gl.GL_TEXTURE_MAG_FILTER,  # property name
-                    gl.GL_LINEAR,  # value
-                )
+                gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR  # target  # property name  # value
+            )
             gl.glTexParameteri(
-                    gl.GL_TEXTURE_2D,  # target
-                    gl.GL_TEXTURE_MIN_FILTER,  # property name
-                    gl.GL_LINEAR,  # value
-                )
+                gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MIN_FILTER, gl.GL_LINEAR  # target  # property name  # value
+            )
 
             # Attach texture to FBO
             gl.glTexImage2D(
-                    gl.GL_TEXTURE_2D,  # target
-                    0,  # mipmap level (0=default)
-                    gl.GL_RGBA8,  # internal format
-                    self.width, self.height,  # size
-                    0,  # border
-                    gl.GL_RGBA,  # format
-                    gl.GL_UNSIGNED_BYTE,  # type
-                    None,  # data
-                )
+                gl.GL_TEXTURE_2D,  # target
+                0,  # mipmap level (0=default)
+                gl.GL_RGBA8,  # internal format
+                self.width,
+                self.height,  # size
+                0,  # border
+                gl.GL_RGBA,  # format
+                gl.GL_UNSIGNED_BYTE,  # type
+                None,  # data
+            )
             gl.glFramebufferTexture2DEXT(
-                    gl.GL_FRAMEBUFFER_EXT,  # target
-                    gl.GL_COLOR_ATTACHMENT0_EXT,  # attachment point
-                    gl.GL_TEXTURE_2D,  # texture target
-                    self.texture_id,  # tex id
-                    0,  # mipmap level
-                )
+                gl.GL_FRAMEBUFFER_EXT,  # target
+                gl.GL_COLOR_ATTACHMENT0_EXT,  # attachment point
+                gl.GL_TEXTURE_2D,  # texture target
+                self.texture_id,  # tex id
+                0,  # mipmap level
+            )
 
             # sanity check
             status = gl.glCheckFramebufferStatusEXT(gl.GL_FRAMEBUFFER_EXT)
@@ -163,20 +146,16 @@ class FBO(object):
         # props to pyprocessing!
         self.data = (ctypes.c_ubyte * (self.width * self.height * 4))()
 
-        gl.glBindTexture(
-                gl.GL_TEXTURE_2D,  # target
-                self.texture_id,  # texture id
-            )
+        gl.glBindTexture(gl.GL_TEXTURE_2D, self.texture_id)  # target  # texture id
         gl.glGetTexImage(
-                gl.GL_TEXTURE_2D,  # target
-                0,  # mipmap level
-                gl.GL_RGBA,  # format
-                gl.GL_UNSIGNED_BYTE,  # type,
-                self.data,  # image data
-            )
+            gl.GL_TEXTURE_2D,  # target
+            0,  # mipmap level
+            gl.GL_RGBA,  # format
+            gl.GL_UNSIGNED_BYTE,  # type,
+            self.data,  # image data
+        )
 
-        return pyglet.image.ImageData(self.width, self.height,
-                'RGBA', self.data)
+        return pyglet.image.ImageData(self.width, self.height, "RGBA", self.data)
 
     def destroy(self):
         """Free memory"""

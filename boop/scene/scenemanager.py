@@ -11,9 +11,7 @@ class SceneManager(object):
         state.scene_manger = self
         for scene in self.active_scenes:
             try:
-                val = self.scenes[scene].handle_event(event_type,
-                                                      state,
-                                                      *args)
+                val = self.scenes[scene].handle_event(event_type, state, *args)
             except KeyError:
                 raise
         return val
@@ -44,12 +42,12 @@ class SceneManager(object):
     def set_camera(self, x, y):
         self.camerax = x
         self.cameray = y
-        self.dispatch_event('on_movecamera', (x, y))
+        self.dispatch_event("on_movecamera", (x, y))
 
     def move_camera(self, xoff, yoff):
         self.camerax += xoff
         self.cameray += yoff
-        self.dispatch_event('on_movecamera', (self.camerax, self.cameray))
+        self.dispatch_event("on_movecamera", (self.camerax, self.cameray))
 
     def get_camera(self):
         return self.camerax, self.cameray
