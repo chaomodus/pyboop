@@ -1,4 +1,4 @@
-from .component import component
+from .component import Component
 import pyglet.window
 import configparser
 import io
@@ -68,7 +68,7 @@ def load_config(keymanager, reset=False, configfile="", defaultconfig=""):
     )
 
 
-class KeyManager(component.Component):
+class KeyManager(Component):
     """
     This is a component which records up/down state of keyboard and and mouse buttons and prouduces impulses.
 
@@ -92,7 +92,7 @@ class KeyManager(component.Component):
     """
 
     def __init__(self, reemit=True):
-        component.Component.__init__(self)
+        Component.__init__(self)
 
         self.key_aliases = {}
         self.key_impulses = set()
@@ -143,6 +143,7 @@ class KeyManager(component.Component):
 
     def on_key_press(self, state, startkey, modifiers):
         """Internal keypress handler."""
+        # print(state, pyglet.window.key.symbol_string(startkey), modifiers)
         if startkey in self.key_aliases:
             key = self.key_aliases[startkey]
         else:

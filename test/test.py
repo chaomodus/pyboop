@@ -6,8 +6,9 @@
 import sys
 sys.path.append('../')
 import pyglet
+from boop.boopwindow import BoopWindow
 import boop
-import boop.component
+import boop.scenemanager
 import boop.scene
 from boop.drawables import Drawable
 import boop.drawtools
@@ -17,7 +18,7 @@ import random
 class MyScene(boop.scene.Scene):
     def __init__(self, window):
         boop.scene.Scene.__init__(self, window)
-        self.components.append(boop.drawables.Clear(window))
+        self.add(boop.drawables.Clear(window))
 
 
 class MouseXhair(Drawable):
@@ -44,13 +45,14 @@ class TestLine(Drawable):
         for i in range(0, 100, 10):
             boop.drawtools.draw_arrow((x, y), (x + (100 * math.cos(math.pi * 2 * (i / 100.0))), y + (100 * math.sin(math.pi * 2 * (i / 100.0)))), color=(i / 100.0, i / 100.0, 1.0 - i / 100.0, 1.0))
 
-config = pyglet.gl.Config(sample_buffers=1,
-                          samples=4,
-                          double_buffer=1,
-                          depth_size=8)
+# config = pyglet.gl.Config(sample_buffers=1,
+#                             samples=4,
+#                             double_buffer=1,
+#                             depth_size=8)
+config = pyglet.gl.Config()
 
 # fnt = pyglet.font.load('Kochi Gothic', 18)
-mywindow = boop.BoopWindow(800,600,scene_manager=boop.scene.SceneManager(), config=config)
+mywindow = BoopWindow(800,600,scene_manager=boop.scenemanager.SceneManager(), config=config)
 scene = MyScene(mywindow)
 mywindow.scene_manager.add(scene, 'test')
 
@@ -68,7 +70,7 @@ scene.add(ch)
 
 scene.add(boop.drawables.DrawWrapper(mywindow, boop.drawtools.draw_polyline, ((random.randint(0, mywindow.width), random.randint(0, mywindow.height)), (random.randint(0, mywindow.width), random.randint(0, mywindow.height)), (random.randint(0, mywindow.width), random.randint(0, mywindow.height))), (1.0, 0.0, 0.0), 10))
 
-label = boop.drawables.Label(mywindow, u"Kawaii ^.^ かわいい", font_name='Kochi Gothic', font_size=18, position=(220,220))
+label = boop.drawables.Label(mywindow, "Kawaii ^.^ かわいい", font_name='kiloji', font_size=18, position=(220,220))
 scene.add(label)
 
 scene.add(TestLine(mywindow))

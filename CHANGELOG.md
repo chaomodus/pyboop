@@ -1,13 +1,21 @@
 # ChangeLog
 
-## [0.0a16 WIP] - chaomodus
+## [0.0a17] - 2019-08-05 chaomodus
 
 Only Python3 supported now, changes to make that the case.
 
-## Changes
+### Changes
 - Make imports more convenient.
 - Add labels to the components, with the default being the order that they are added
   to the ComponentHost.
+- Reorganize Component and Scene parts to make more sense (they aren't arbitrarily submodules
+  now).
+
+### Added
+- New TileGrid drawable which translates arrays of tiles into a displayed tile grid.
+
+### Fixed
+- Various Python3 fixes.
 
 
 ## [0.0a14] - chamodus

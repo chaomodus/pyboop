@@ -1,5 +1,5 @@
-from boop.boopwindow import BoopWindow
-from boop.fbo import FBO
+from .boopwindow import BoopWindow
+from .fbo import FBO
 import pyglet.gl as GL
 
 

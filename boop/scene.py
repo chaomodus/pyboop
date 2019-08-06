@@ -1,4 +1,4 @@
-from boop.component import Component
+from .component import Component
 
 
 # note by default this acts just like a cbomponent host / component.

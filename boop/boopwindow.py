@@ -1,5 +1,5 @@
 from pyglet.window import Window
-from .component import ComponentHost
+from .componenthost import ComponentHost
 from .events import EventStateHolder, boop_events
 from .layereddict import LayeredDict
 

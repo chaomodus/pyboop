@@ -44,9 +44,9 @@ def get_color_specifier(basecolor, number):
     """Build an OpenGL color array for the number of specified vertices."""
     color = [float(x) for x in basecolor]
     if len(color) == 3:
-        return ("c3d", color * number)
+        return ("c3d", color * int(number))
     elif len(color) == 4:
-        return ("c4d", color * number)
+        return ("c4d", color * int(number))
 
 
 # this will someday draw nice polylines with corners and whatnot.
@@ -423,8 +423,8 @@ def make_circle_annulus(
         coords.append(x + math.cos(theta) * radius_outer)
         coords.append(y + math.sin(theta) * radius_outer)
         coords.append(z)
-    colspec = get_color_specifier(color, len(coords) / 3)
-    mybatch.add(len(coords) / 3, GL.GL_TRIANGLE_STRIP, None("v3f", coords), colspec)
+    colspec = get_color_specifier(color, len(coords) // 3)
+    mybatch.add(len(coords) // 3, GL.GL_TRIANGLE_STRIP, None("v3f", coords), colspec)
     return mybatch
 
 
@@ -444,8 +444,8 @@ def draw_circle_annulus(x, y, color=(1.0, 1.0, 1.0), radius_inner=5.0, radius_ou
         coords.append(x + math.cos(theta) * radius_outer)
         coords.append(y + math.sin(theta) * radius_outer)
         coords.append(z)
-    colspec = get_color_specifier(color, len(coords) / 3)
-    pyglet.graphics.draw(len(coords) / 3, GL.GL_TRIANGLE_STRIP, ("v3f", coords), colspec)
+    colspec = get_color_specifier(color, len(coords) // 3)
+    pyglet.graphics.draw(len(coords) // 3, GL.GL_TRIANGLE_STRIP, ("v3f", coords), colspec)
 
 
 def make_arrow(startpoint, endpoint, color=(1.0, 1.0, 1.0), arrowwidth=15, z=0.0, style=ARROW_STYLE_PLAIN, batch=None):
